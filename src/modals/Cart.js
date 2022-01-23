@@ -15,31 +15,35 @@ import img2 from "../assets/products/headset2.png";
 import img3 from "../assets/products/iphone12.svg";
 import { CallOutlined, ShoppingBasketOutlined } from "@material-ui/icons";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   drawer: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "column",
     padding: 30,
-    height: window.innerHeight,
     position: "relative",
     width: 300,
+    [theme.breakpoints.down("xs")]: {
+      minWidth: "95%",
+    },
   },
   drawer2: {
     paddingTop: 30,
     paddingBottom: 200,
-    height: window.innerHeight,
     width: 400,
     overflowX: "hidden",
     position: "relative",
+    [theme.breakpoints.down("xs")]: {
+      minWidth: "95%",
+    },
   },
   text: {
     width: 200,
     textAlign: "center",
     fontSize: 13,
   },
-});
+}));
 export default function CartModal({ handleClick3, cartModal, setCartModal }) {
   const styles = useStyles();
   const [isCart, setIsCart] = useState(true);

@@ -30,8 +30,15 @@ export default function LoginForm({
     setOpen(false);
     setLoginModal(false);
   };
-  const useStyles = makeStyles(() => ({
-    paper: { minWidth: "400px", textAlign: "center", padding: 50 },
+  const useStyles = makeStyles((theme) => ({
+    paper: {
+      minWidth: "400px",
+      textAlign: "center",
+      padding: 50,
+      [theme.breakpoints.down("xs")]: {
+        minWidth: "95%",
+      },
+    },
     typo: {
       marginTop: "-1rem",
     },
