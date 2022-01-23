@@ -1,0 +1,27 @@
+.category-card {
+  background: white;
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  display: grid;
+  place-content: center;
+  place-items: center;
+  margin: 20px;
+}
+.status-2 {
+  background: #2b3445;
+  color: #fff;
+  text-align: center;
+  padding: 8px;
+  width: 100px;
+  position: absolute;
+  top: 5%;
+  left: 2%;
+  font-size: 12px !important;
+  border-radius: 48px;
+}
+.category-image img {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+}

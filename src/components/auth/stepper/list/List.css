@@ -1,0 +1,14 @@
+.list-container {
+  padding: 20px 10px;
+  color: #555;
+}
+.list-header {
+  padding: 15px 20px !important;
+  font-weight: 900;
+}
+.list-flex {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  place-content: center;
+}

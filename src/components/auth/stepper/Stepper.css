@@ -1,0 +1,33 @@
+.stepper-bg {
+  background: #fff !important;
+}
+.paper {
+  padding: 20px 15px;
+}
+.container-card-header {
+  display: flex;
+  align-items: center;
+  padding-bottom: 10px;
+}
+.container-card-header2 div {
+  display: flex;
+  align-items: center;
+}
+.container-card-header2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+}
+.container-card-avatar {
+  background: #eb5757 !important;
+  margin-right: 10px;
+}
+.container-card-address {
+  font-size: 14px !important;
+  margin: 30px 20px 0 0 !important;
+}
+.small-gray-text {
+  font-size: 14px !important;
+  color: #555 !important;
+}

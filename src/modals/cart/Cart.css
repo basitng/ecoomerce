@@ -1,0 +1,39 @@
+.cart-card {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.cart-card:hover {
+  cursor: pointer;
+}
+.cart-card .image img {
+  width: 100px;
+}
+.cart-card .cart-body {
+  padding-right: 0.5rem;
+}
+.cart-card .cart-card-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cart-card .cart-product-name {
+  font-size: 13px;
+}
+.fixed-btn {
+  background: #fff;
+  z-index: 100;
+  width: 25%;
+  position: fixed;
+  bottom: 0%;
+  right: 2%;
+}
+@media screen and (max-width: 600px) {
+  .fixed-btn {
+    bottom: 10%;
+    width: 80%;
+    right: 5%;
+  }
+}

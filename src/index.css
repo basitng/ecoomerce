@@ -1,0 +1,130 @@
+html,
+body {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+@font-face {
+  font-family: "poppins";
+  src: url("./assets/font/Poppins-Regular.ttf");
+}
+body {
+  font-family: "poppins";
+  background: #f6f9fc;
+  margin: 0;
+  padding: 0;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+.link {
+  color: white !important;
+  text-decoration: none !important;
+}
+.link2 {
+  color: #909eb8 !important;
+  text-decoration: none !important;
+}
+.logo-link {
+  color: #555 !important;
+  text-decoration: none !important;
+}
+.detailLinks {
+  text-decoration: none !important;
+}
+.detailLinks:active {
+  color: #555;
+}
+.container {
+  padding-top: 4rem;
+  width: 90%;
+  margin: 10px auto;
+}
+.bold-text {
+  font-weight: 900 !important;
+}
+
+.svg-icon {
+  fill: #555 !important;
+  width: 1.2em !important;
+  height: 1.2em !important;
+  display: inline-block;
+}
+.icon-wrapper {
+  width: 60px;
+  height: 60px;
+  background: #eee;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin: 10px auto;
+}
+.bottom-nav,
+.appBar-mobile {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    width: 100%;
+  }
+  .bottom-nav {
+    display: block;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+  }
+  .appBar-mobile {
+    display: block;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+  }
+  .mobile-appBar {
+    position: relative !important;
+    padding: 10px !important;
+  }
+  .search-bar {
+    position: absolute !important;
+    top: 20%;
+    right: 20%;
+  }
+}
+.cat-parent {
+  position: relative;
+}
+.expanded-list {
+  transition: 1s cubic-bezier(0.29, 0.61, 0.83, 0.67);
+  width: 200px;
+  height: auto;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  z-index: 40000;
+  list-style: none;
+  padding: 30px 10px;
+  line-height: 2.5rem;
+  border-radius: 10px;
+  left: -20px;
+  top: 40px;
+}
+.expanded-list li {
+  padding: 5px;
+  transition: 0.4s cubic-bezier(0.075, 0.82, 0.165, 1);
+  padding-left: 2rem;
+  border-radius: 10px;
+}
+.expanded-list li:hover {
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.3);
+  background: #eb5757;
+  opacity: 0.8;
+  cursor: pointer;
+}
+.or-cred {
+  text-align: center;
+  margin-top: -1rem;
+}

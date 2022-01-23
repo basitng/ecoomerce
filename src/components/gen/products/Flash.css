@@ -1,0 +1,83 @@
+.flash-card {
+  position: relative;
+  background: white;
+  border-radius: 20px;
+}
+.img {
+  width: 200px;
+}
+.flash-card-body {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-top: 3rem;
+}
+.flash-card-img {
+  padding-top: 2rem;
+  display: grid;
+  place-content: center;
+}
+.product-name {
+  color: #555;
+  font-size: 16px !important;
+}
+.rating-icon {
+  color: orange;
+  font-size: 20px;
+}
+.flash-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0px;
+}
+.price {
+  font-weight: 900;
+}
+.discount-price {
+  font-weight: 900;
+  font-size: 17px !important;
+}
+.add-icon-container {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #eb5757;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+.add-icon {
+  color: #eb5757;
+}
+.add-icon-container2 {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #eb5757;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+.status {
+  position: absolute;
+  top: 5%;
+  left: 2%;
+  background: #eb5757;
+  color: white;
+  padding: 3px;
+  z-index: 20;
+  width: 50px;
+  border-radius: 48px;
+  text-align: center;
+  font-size: 12px;
+}
+.flex-items {
+  display: flex;
+  align-items: center;
+}
+.actual-price {
+  font-size: 13px;
+  color: #555 !important;
+  text-decoration: line-through;
+  padding-left: 0.3rem;
+}
