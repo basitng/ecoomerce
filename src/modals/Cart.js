@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     overflowX: "hidden",
     position: "relative",
     [theme.breakpoints.down("xs")]: {
-      minWidth: "90%",
+      minWidth: "50%",
       padding: 10,
       background: "red",
     },
@@ -62,7 +62,6 @@ export default function CartModal({ handleClick3, cartModal, setCartModal }) {
 
   return (
     <React.Fragment>
-      <Button onClick={toggleDrawer}>click</Button>
       <Drawer
         disableScrollLock
         disablePortal
