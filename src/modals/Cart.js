@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     overflowX: "hidden",
     position: "relative",
     [theme.breakpoints.down("xs")]: {
-      minWidth: "50%",
+      width: "50%",
       padding: 10,
       background: "red",
     },
