@@ -36,4 +36,8 @@
     width: 80%;
     right: 5%;
   }
+  .closeBtn {
+    bottom: 10%;
+    right: 5%;
+  }
 }

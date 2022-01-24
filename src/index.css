@@ -91,7 +91,7 @@ code {
   .search-bar {
     position: absolute !important;
     top: 20%;
-    right: 20%;
+    right: 5%;
   }
 }
 .cat-parent {

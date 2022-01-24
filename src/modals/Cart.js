@@ -3,6 +3,7 @@ import {
   Button,
   Drawer,
   Grid,
+  IconButton,
   makeStyles,
   Typography,
 } from "@material-ui/core";
@@ -13,7 +14,11 @@ import CartProduct from "./cart/index";
 import img1 from "../assets/products/headset.png";
 import img2 from "../assets/products/headset2.png";
 import img3 from "../assets/products/iphone12.svg";
-import { CallOutlined, ShoppingBasketOutlined } from "@material-ui/icons";
+import {
+  CallOutlined,
+  CloseOutlined,
+  ShoppingBasketOutlined,
+} from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -23,13 +28,25 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     padding: 30,
     position: "relative",
+
+    background: "red",
     width: 300,
     [theme.breakpoints.down("xs")]: {
       padding: 10,
-      minWidth: "90%",
-      background: "green",
+      width: "90%",
     },
   },
+  closeBtn: {
+    fontSize: 60,
+    color: "#555",
+    position: "fixed",
+    bottom: "5%",
+    zIndex: 20,
+    left: "50%",
+    display: "block",
+    transform: "translate(-50px, -50px)",
+  },
+
   drawer2: {
     paddingTop: 30,
     paddingBottom: 200,
@@ -37,9 +54,9 @@ const useStyles = makeStyles((theme) => ({
     overflowX: "hidden",
     position: "relative",
     [theme.breakpoints.down("xs")]: {
-      width: "70%",
-      padding: 10,
-      background: "red",
+      width: "90%",
+      height: "100vh",
+      paddingTop: 40,
     },
   },
   text: {
@@ -69,6 +86,9 @@ export default function CartModal({ handleClick3, cartModal, setCartModal }) {
         anchor={"right"}
         open={cartModal}
       >
+        <IconButton className={styles.closeBtn} onClick={toggleDrawerClose}>
+          <CloseOutlined style={{ fontSize: 50 }} />
+        </IconButton>
         {isCart ? (
           <div className={styles.drawer2}>
             <Grid container spacing={2}>
@@ -123,6 +143,9 @@ export default function CartModal({ handleClick3, cartModal, setCartModal }) {
                 Your shopping bag is empty. Start shopping
               </Typography>
             </div>
+            {/* <IconButton onClick={toggleDrawerClose} className={styles.closeBtn}>
+              <CloseOutlined />
+            </IconButton> */}
           </>
         )}
       </Drawer>
