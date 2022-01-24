@@ -25,7 +25,8 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     width: 300,
     [theme.breakpoints.down("xs")]: {
-      minWidth: "95%",
+      padding: 10,
+      minWidth: "90%",
     },
   },
   drawer2: {
@@ -35,7 +36,8 @@ const useStyles = makeStyles((theme) => ({
     overflowX: "hidden",
     position: "relative",
     [theme.breakpoints.down("xs")]: {
-      minWidth: "95%",
+      minWidth: "90%",
+      padding: 10,
     },
   },
   text: {

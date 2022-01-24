@@ -36,7 +36,7 @@ export default function LoginForm({
       textAlign: "center",
       padding: 50,
       [theme.breakpoints.down("xs")]: {
-        minWidth: "95%",
+        minWidth: "90%",
       },
     },
     typo: {
