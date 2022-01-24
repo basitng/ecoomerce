@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("xs")]: {
       padding: 10,
       minWidth: "90%",
+      background: "green",
     },
   },
   drawer2: {
@@ -38,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("xs")]: {
       minWidth: "90%",
       padding: 10,
+      background: "red",
     },
   },
   text: {
