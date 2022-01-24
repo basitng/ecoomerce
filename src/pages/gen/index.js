@@ -24,6 +24,13 @@ import {
   LocalShipping,
   Security,
 } from "@material-ui/icons";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
 export default function HomePage() {
   return (
     <React.Fragment>
@@ -31,12 +38,36 @@ export default function HomePage() {
       <div className="container">
         <Container>
           <FlashHeader />
-          <Grid container spacing={2} justifyContent="center">
-            <FlashProduct img={img1} />
-            <FlashProduct img={img2} />
-            <FlashProduct img={img3} />
-            <FlashProduct img={img4} />
-          </Grid>
+
+          <Swiper
+            breakpoints={{
+              0: {
+                slidesPerView: 1,
+              },
+              768: {
+                slidesPerView: 4,
+                spaceBetween: 10,
+              },
+            }}
+            modules={[Navigation, Pagination, Scrollbar, A11y]}
+            navigation
+            scrollbar={{ draggable: true }}
+            onSwiper={(swiper) => console.log(swiper)}
+            onSlideChange={() => console.log("slide change")}
+          >
+            <SwiperSlide>
+              <FlashProduct img={img1} />
+            </SwiperSlide>
+            <SwiperSlide>
+              <FlashProduct img={img2} />
+            </SwiperSlide>
+            <SwiperSlide>
+              <FlashProduct img={img3} />
+            </SwiperSlide>
+            <SwiperSlide>
+              <FlashProduct img={img4} />
+            </SwiperSlide>
+          </Swiper>
           <ArivalHeader />
           <Grid container spacing={2} justifyContent="center">
             <ArrivalProduct img={img1} />
@@ -44,17 +75,36 @@ export default function HomePage() {
             <ArrivalProduct img={img3} />
             <ArrivalProduct img={img4} />
           </Grid>
-          <CategoryHeader />
-          <Grid container spacing={2} style={{ position: "relative" }}>
-            <Category img={img1} text={"Phone"} />
-            <Category img={img4} text={"Headset"} />
-            <Category img={img3} text={"Airpod"} />
-            <div className="indicator2">
-              <div />
-              <div className="active2" />
-              <div />
-            </div>
-          </Grid>
+
+          <div>
+            <CategoryHeader />
+            <Swiper
+              breakpoints={{
+                0: {
+                  slidesPerView: 1,
+                },
+                768: {
+                  slidesPerView: 2,
+                  spaceBetween: 10,
+                },
+              }}
+              modules={[Navigation, Pagination, Scrollbar, A11y]}
+              navigation
+              scrollbar={{ draggable: true }}
+              onSwiper={(swiper) => console.log(swiper)}
+              onSlideChange={() => console.log("slide change")}
+            >
+              <SwiperSlide>
+                <Category img={img1} text={"Phone"} />
+              </SwiperSlide>
+              <SwiperSlide>
+                <Category img={img4} text={"Headset"} />
+              </SwiperSlide>
+              <SwiperSlide>
+                <Category img={img3} text={"Airpod"} />
+              </SwiperSlide>
+            </Swiper>
+          </div>
 
           <DiscountHeader />
           <Grid container spacing={2} style={{ position: "relative" }}>

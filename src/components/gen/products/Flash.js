@@ -9,7 +9,7 @@ export default function FlashProduct({ img }) {
   const params = useParams();
   return (
     <React.Fragment>
-      <Grid item xs={12} md={3}>
+      <Grid item xs={12} md={12}>
         <Paper elevation={1}>
           <div className="flash-card">
             <div className="status">New</div>
