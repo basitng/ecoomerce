@@ -16,7 +16,7 @@ export default function _Banner() {
             amount of money. No wonder people loves george tech planet
             enterprises.
           </Typography>
-          <Link to="/payment" className="link">
+          <Link to="/signup" className="link">
             <Button
               className="btn"
               variant="contained"

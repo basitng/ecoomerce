@@ -10,6 +10,7 @@ import PaymentPage from "./pages/auth/payment";
 import DetailPage from "./pages/auth/Detail";
 import ProfilePage from "./pages/auth/profile";
 import SignupPage from "./pages/unauth/signup";
+import InValidRoute from "./404";
 
 const theme = createTheme({
   palette: {
@@ -37,6 +38,7 @@ function App() {
         <Route path="/detail/:id" element={<DetailPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="*" element={<InValidRoute />} />
       </Routes>
       <Footer />
     </ThemeProvider>
