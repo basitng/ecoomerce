@@ -1,6 +1,6 @@
 import axios from "axios";
-const BASE_URL = "http://localhost:5000/api/";
-const BASE_AUTH_URL = "http://localhost:5000/auth/";
+const BASE_URL = "https://ngeorgetech.herokuapp.com/api/";
+const BASE_AUTH_URL = "https://ngeorgetech.herokuapp.com/auth/";
 
 let TOKEN;
 if (localStorage.getItem("user")) {
