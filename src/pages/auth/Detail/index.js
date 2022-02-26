@@ -55,7 +55,7 @@ export default function DetailPage() {
 
   console.log(current);
   return (
-    <div style={{ marginTop: "7rem" }}>
+    <div style={{ marginTop: "10rem" }}>
       <Container maxWidth="md">
         {!data ? (
           <center>

@@ -22,6 +22,7 @@ import LoginForm from "../../../modals/Login";
 import "../styles/Desktop.css";
 import { getApi } from "../../../requestMethods";
 import { SearchContext } from "../../../context/providers/SearchContext";
+import Logo from "../../../assets/Logo.png";
 
 export default function DesktopAuthenticated({ display, totalItems }) {
   const { dispatch } = useContext(AuthContext);
@@ -107,7 +108,7 @@ export default function DesktopAuthenticated({ display, totalItems }) {
             <div className="logo">
               <h1>
                 <Link to="/" className="logo-link">
-                  Logo{" "}
+                  <img src={Logo} className="web--logo" />
                 </Link>
               </h1>
             </div>

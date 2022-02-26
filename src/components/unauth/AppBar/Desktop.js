@@ -22,6 +22,7 @@ import CategoryDropdown from "../../../modals/category";
 import LoginForm from "../../../modals/Login";
 import { getApi } from "../../../requestMethods";
 import "../styles/Desktop.css";
+import Logo from "../../../assets/Logo.png";
 
 export default function Desktop({ display, totalItems }) {
   const [loginModal, setLoginModal] = React.useState(false);
@@ -89,7 +90,7 @@ export default function Desktop({ display, totalItems }) {
             <div className="logo">
               <h1>
                 <Link to="/" className="logo-link">
-                  Logo{" "}
+                  <img src={Logo} className="web--logo" />
                 </Link>
               </h1>
             </div>
