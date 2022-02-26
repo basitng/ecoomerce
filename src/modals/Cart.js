@@ -9,11 +9,10 @@ import {
 } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
+import { CartProvider, useCart } from "react-use-cart";
+
 import Svg from "../assets/shopping-bag.svg";
 import CartProduct from "./cart/index";
-import img1 from "../assets/products/headset.png";
-import img2 from "../assets/products/headset2.png";
-import img3 from "../assets/products/iphone12.svg";
 import {
   CallOutlined,
   CloseOutlined,
@@ -28,8 +27,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     padding: 30,
     position: "relative",
-
-    background: "red",
+    height: "100vh",
     width: 300,
     [theme.breakpoints.down("xs")]: {
       padding: 10,
@@ -66,16 +64,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 export default function CartModal({ handleClick3, cartModal, setCartModal }) {
+  const {
+    isEmpty,
+    cartTotal,
+    totalUniqueItems,
+    items,
+    updateItemQuantity,
+    removeItem,
+  } = useCart();
   const styles = useStyles();
-  const [isCart, setIsCart] = useState(true);
-
-  const toggleDrawer = () => {
-    setCartModal(true);
-  };
 
   const toggleDrawerClose = () => {
     setCartModal(false);
   };
+
+  const addComa = (amt) =>
+    "₦" + amt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
   return (
     <React.Fragment>
@@ -89,16 +93,19 @@ export default function CartModal({ handleClick3, cartModal, setCartModal }) {
         <IconButton className={styles.closeBtn} onClick={toggleDrawerClose}>
           <CloseOutlined style={{ fontSize: 50 }} />
         </IconButton>
-        {isCart ? (
+        {!isEmpty ? (
           <div className={styles.drawer2}>
             <Grid container spacing={2}>
-              <CartProduct
-                img={img1}
-                name={"Headset max ma"}
-                price={"$10.00"}
-              />
-              <CartProduct img={img2} name={"Headset max 2"} price={"$10.00"} />
-              <CartProduct img={img3} name={"Headset max 2"} price={"$10.00"} />
+              {items.map((data) => (
+                <CartProduct
+                  img={data.img}
+                  name={data.title}
+                  price={data.price}
+                  regex={addComa}
+                  id={data.id}
+                  quantity={data.quantity}
+                />
+              ))}
 
               <Grid
                 container
@@ -115,7 +122,7 @@ export default function CartModal({ handleClick3, cartModal, setCartModal }) {
                       variant="contained"
                       color="primary"
                     >
-                      Checkout($200.00)
+                      Checkout({addComa(cartTotal)} )
                     </Button>
                   </Link>
                 </Grid>

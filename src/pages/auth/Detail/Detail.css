@@ -22,8 +22,13 @@
   cursor: pointer;
 }
 
-.detail-img-thumbnail:first-child {
-  border: 1px solid #e95757;
+.active--image {
+  border: 2px solid #e95757;
+  width: 100px;
+  margin: 10px;
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
 }
 .detail-header-text {
   font-size: 25px !important;

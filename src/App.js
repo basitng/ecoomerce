@@ -3,7 +3,7 @@ import { ThemeProvider } from "@material-ui/core";
 import { createTheme } from "@material-ui/core/styles";
 import HomePage from "./pages/gen";
 import LinearIndeterminate from "./loader/Progress";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import Navigation from "./components/Navigation";
 import Footer from "./components/gen/footer";
 import PaymentPage from "./pages/auth/payment";
@@ -11,6 +11,9 @@ import DetailPage from "./pages/auth/Detail";
 import ProfilePage from "./pages/auth/profile";
 import SignupPage from "./pages/unauth/signup";
 import InValidRoute from "./404";
+import { AuthContext } from "./context/providers/AuthContext";
+import _LinearBuffer from "./loader/BufferProgress";
+import SearchPage from "./pages/gen/Search";
 
 const theme = createTheme({
   palette: {
@@ -28,18 +31,27 @@ const theme = createTheme({
 });
 function App() {
   const navigate = useNavigate();
+  const { isAuthenticated } = React.useContext(AuthContext);
+  const user = isAuthenticated.isLoggedIn;
   return (
     <ThemeProvider theme={theme}>
-      <Navigation />
-      <LinearIndeterminate />
       <Routes>
+        {user ? (
+          <Route path="/signup" element={<Navigate to="/" />} />
+        ) : (
+          <>
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/payment" element={<Navigate to="/" />} />
+            <Route path="/profile" element={<Navigate to="/" />} />
+          </>
+        )}
         <Route path="/" element={<HomePage />} />
+        <Route path="/search" element={<SearchPage />} />
         <Route path="/payment" element={<PaymentPage />} />
         <Route path="/detail/:id" element={<DetailPage />} />
         <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="*" element={<InValidRoute />} />
       </Routes>
+      <Navigation show_off_in={"signup"} />
       <Footer />
     </ThemeProvider>
   );

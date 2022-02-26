@@ -36,9 +36,8 @@ code {
   color: #555;
 }
 .container {
-  padding-top: 4rem;
-  width: 90%;
-  margin: 10px auto;
+  width: 100%;
+  margin: 0px auto;
 }
 .bold-text {
   font-weight: 900 !important;

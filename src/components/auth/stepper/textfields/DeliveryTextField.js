@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
 }));
-export default function DeliveryTextField({ label, type }) {
+export default function DeliveryTextField({ label }) {
   const classes = useStyles();
   const [choose, setChoose] = React.useState("");
 
@@ -28,12 +28,13 @@ export default function DeliveryTextField({ label, type }) {
     <div>
       <TextField
         variant="outlined"
-        type={type === "delivery_date" ? "date" : "time"}
+        type="tel"
         fullWidth
         value={choose}
         onChange={handleChange}
         autoFocus
         size="small"
+        label={label}
       />
     </div>
   );

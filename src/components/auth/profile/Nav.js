@@ -1,5 +1,6 @@
 import {
   Badge,
+  CircularProgress,
   IconButton,
   List,
   ListItem,
@@ -18,8 +19,10 @@ import {
   ShoppingBasketOutlined,
 } from "@material-ui/icons";
 import React from "react";
+import { AuthContext } from "../../../context/providers/AuthContext";
 import EditProfileModal from "../../../modals/profile/EditProfile";
 import OrderModal from "../../../modals/profile/Order";
+import { getApi } from "../../../requestMethods";
 
 const useStyles = makeStyles((theme) => ({
   pushDown: {
@@ -33,10 +36,41 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function _DashboardNav() {
   const [state, setState] = React.useState(false);
-
+  const { isAuthenticated } = React.useContext(AuthContext);
+  const { payload } = isAuthenticated;
+  const [user, setUser] = React.useState(payload.user);
+  const [Loading, setLoading] = React.useState(true);
   const handleOpen = () => setState(true);
+  const [Query, setQuery] = React.useState({
+    allOrders: 0,
+    delivered: 0,
+    awaitingDelivery: 0,
+    awaitingPayment: 0,
+  });
 
   const classes = useStyles();
+  const box = [
+    { value: Query.allOrders, status: "All Orders" },
+    { value: Query.delivered, status: "Delivered" },
+    { value: Query.awaitingDelivery, status: "Awaiting Delivery" },
+    { value: "00", status: "Report" },
+  ];
+
+  React.useEffect(async () => {
+    await getApi
+      .get(`/order/find/${user._id}`)
+      .then(({ data }) => {
+        setLoading(false);
+        setQuery({
+          ...Query,
+          allOrders: data.orders,
+          delivered: data.delivered,
+          awaitingDelivery: data.pending,
+        });
+      })
+      .catch((e) => console.log(e));
+  }, [0]);
+  console.log("pending", Query.pending);
   return (
     <div className={classes.pushDown}>
       <EditProfileModal />
@@ -45,53 +79,27 @@ export default function _DashboardNav() {
         <List dense={false}>
           <Typography className={classes.header}>Dashboard</Typography>
 
-          <ListItem button onClick={handleOpen}>
-            <ListItemIcon>
-              <ShoppingBasketOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"All Orders"} />
-            <ListItemSecondaryAction>
-              <IconButton edge="end">
-                <Badge badgeContent={"03"} />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-
-          <ListItem button>
-            <ListItemIcon>
-              <LocalShippingOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Delivered"} />
-            <ListItemSecondaryAction>
-              <IconButton edge="end">
-                <Badge badgeContent={"04"} />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-
-          <ListItem button>
-            <ListItemIcon>
-              <LocationCityOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Awaiting Delivery"} />
-            <ListItemSecondaryAction>
-              <IconButton edge="end">
-                <Badge badgeContent={"05"} />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-
-          <ListItem button>
-            <ListItemIcon>
-              <CreditCardOutlined />
-            </ListItemIcon>
-            <ListItemText primary={"Awaiting Payment"} />
-            <ListItemSecondaryAction>
-              <IconButton edge="end">
-                <Badge badgeContent={"00"} />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
+          {box.map((data) => (
+            <ListItem button onClick={handleOpen}>
+              <ListItemIcon>
+                <ShoppingBasketOutlined />
+              </ListItemIcon>
+              <ListItemText primary={data.status} />
+              <ListItemSecondaryAction>
+                <IconButton edge="end">
+                  {Loading ? (
+                    <CircularProgress
+                      size={15}
+                      color="secondary"
+                      thickness={3}
+                    />
+                  ) : (
+                    <Badge badgeContent={data.value} />
+                  )}
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))}
         </List>
       </Paper>
     </div>

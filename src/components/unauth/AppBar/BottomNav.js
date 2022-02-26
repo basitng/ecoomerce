@@ -13,6 +13,7 @@ import {
 import LoginForm from "../../../modals/Login";
 import { Link } from "react-router-dom";
 import CartModal from "../../../modals/Cart";
+import { useCart } from "react-use-cart";
 
 const useStyles = makeStyles({
   root: {
@@ -24,6 +25,7 @@ const useStyles = makeStyles({
 
 export default function BottomNav() {
   const classes = useStyles();
+  const { totalItems } = useCart();
   const [value, setValue] = React.useState(0);
   const [loginModal, setLoginModal] = React.useState(false);
   const [cartModal, setCartModal] = React.useState(false);
@@ -78,7 +80,7 @@ export default function BottomNav() {
           onClick={handleCartModal}
           label="Carts"
           icon={
-            <Badge badgeContent={3} color="primary">
+            <Badge badgeContent={totalItems} color="primary">
               <ShoppingCartOutlined />
             </Badge>
           }
@@ -89,7 +91,6 @@ export default function BottomNav() {
           onClick={handleLoginClick}
           icon={<PersonAddOutlined />}
         />
-        <BottomNavigationAction label="Theme" icon={<SettingsOutlined />} />
       </BottomNavigation>
     </Paper>
   );

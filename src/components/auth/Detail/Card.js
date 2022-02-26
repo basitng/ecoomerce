@@ -11,6 +11,7 @@ import { orange, grey } from "@material-ui/core/colors";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 
 import { Star } from "@material-ui/icons";
+import { Rating } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,13 +19,16 @@ const useStyles = makeStyles((theme) => ({
     background: "transparent",
     [theme.breakpoints.down("xs")]: {
       maxWidth: "100%",
+      boxShadow: theme.shadows[1],
     },
   },
   media: {
     height: 0,
     paddingTop: "56.25%", // 16:9
   },
-
+  CardContent: {
+    marginTop: "-1rem",
+  },
   avatar: {
     backgroundColor: grey[500],
   },
@@ -37,8 +41,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ProductReviewCard({ avatar, type }) {
+export default function ProductReviewCard({
+  avatar,
+  rating,
+  type,
+  desc,
+  user,
+}) {
   const classes = useStyles();
+  const [value, setValue] = React.useState(rating);
 
   return (
     <Card elevation={0} className={classes.root}>
@@ -60,26 +71,19 @@ export default function ProductReviewCard({ avatar, type }) {
             )}
           </>
         }
-        title="Shrimp and Chorizo Paella"
+        title={user}
         subheader={
-          <div className="detail-rating">
-            <Star className={classes.icon} />
-            <Star className={classes.icon} />
-            <Star className={classes.icon} />
-            <Star className={classes.icon} />
-            <Star className={classes.icon} />
-            <Typography className={classes.ratingText}>4.7</Typography>
-          </div>
+          <>
+            <div className="detail-rating">
+              <Rating name="read-only" value={value} readOnly />
+              <Typography className={classes.ratingText}>({rating})</Typography>
+            </div>
+            <Typography variant="body1" color="textSecondary" component="p">
+              {desc}
+            </Typography>
+          </>
         }
       />
-
-      <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
-        </Typography>
-      </CardContent>
     </Card>
   );
 }

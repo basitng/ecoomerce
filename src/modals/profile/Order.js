@@ -1,5 +1,6 @@
 import {
   Button,
+  CircularProgress,
   Dialog,
   DialogContent,
   makeStyles,
@@ -8,8 +9,10 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from "@material-ui/core";
 import React, { useEffect } from "react";
+import { getApiWithToken } from "../../requestMethods";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -31,19 +34,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 export default function OrderModal({ handleOpen, setHandleOpen }) {
+  const isOnline = navigator.onLine;
   const [open, setOpen] = React.useState(false);
+  const [data, setData] = React.useState();
+  const [Loading, setLoading] = React.useState(true);
   const handleClose = () => {
     setOpen(false);
     setHandleOpen(false);
   };
-  useEffect(() => {
+
+  useEffect(async () => {
     if (handleOpen) {
       setOpen(true);
     } else {
       setOpen(false);
       setHandleOpen(false);
     }
+    if (isOnline === true) {
+      console.log("howfar", isOnline);
+      await getApiWithToken
+        .get("/order")
+        .then(({ data }) => {
+          setLoading(false);
+          setData(data);
+        })
+        .catch((e) => {
+          console.log(e);
+          setLoading(true);
+        });
+    } else {
+      setData([]);
+    }
   }, [handleOpen]);
+
+  function numberWithCommas(x) {
+    return `₦${x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+  }
   const classes = useStyles();
   return (
     <div>
@@ -52,28 +78,56 @@ export default function OrderModal({ handleOpen, setHandleOpen }) {
         open={open}
         onClose={handleClose}
       >
-        <DialogContent>
-          <Table className={classes.table}>
-            <TableHead>
-              <TableCell>Order #</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Date Purchased</TableCell>
-              <TableCell>Total</TableCell>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell component={"th"}>Iphone12</TableCell>
-                <TableCell component={"th"}>
-                  <Button variant="outlined" color="secondary">
-                    Pending
-                  </Button>
-                </TableCell>
-                <TableCell component={"th"}>12-10-2021</TableCell>
-                <TableCell component={"th"}>$20,000</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </DialogContent>
+        {Loading ? (
+          <div style={{ display: "grid", placeContent: "center", padding: 30 }}>
+            <CircularProgress size={40} thickness={10} color="secondary" />
+          </div>
+        ) : (
+          <DialogContent>
+            <Table className={classes.table}>
+              <TableHead>
+                <TableCell>Order #</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Date Purchased</TableCell>
+                <TableCell>Total</TableCell>
+              </TableHead>
+              <TableBody>
+                {isOnline === true ? (
+                  <>
+                    {data ? (
+                      <>
+                        {data.map((data) => (
+                          <TableRow>
+                            <TableCell component={"th"}>
+                              {data.productId}
+                            </TableCell>
+                            <TableCell component={"th"}>
+                              <Button variant="outlined" color="secondary">
+                                {data.status ? "Delivered" : "Pending"}
+                              </Button>
+                            </TableCell>
+                            <TableCell component={"th"}>
+                              {data.createdAt}
+                            </TableCell>
+                            <TableCell component={"th"}>
+                              {numberWithCommas(data.amt)}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </>
+                    ) : (
+                      ""
+                    )}
+                  </>
+                ) : (
+                  <Typography style={{ justifyContent: "center", padding: 10 }}>
+                    No internet connection
+                  </Typography>
+                )}
+              </TableBody>
+            </Table>
+          </DialogContent>
+        )}
       </Dialog>
     </div>
   );

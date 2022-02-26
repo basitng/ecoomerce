@@ -1,9 +1,9 @@
 .banner {
   padding: 100px 40px;
-  background: #fff;
+  background-color: transparent;
 }
 .banner-caption {
-  padding-top: 120px;
+  padding-top: 60px;
   padding-left: 60px;
 }
 .banner-img {
@@ -54,11 +54,20 @@
 
 @media screen and (max-width: 600px) {
   .banner {
-    padding: 100px 10px;
-    overflow: hidden;
+    padding: 10px;
+    padding-bottom: 50px;
+    overflow-x: hidden;
+    width: 100% !important;
+    display: block;
+  }
+  .caption-text {
+    font-size: 14px !important;
+    font-weight: 400 !important;
+    width: 350px;
+    padding-top: 10px;
   }
   .banner-caption {
-    padding-left: 10px;
+    padding-left: 1px;
     padding-top: 60px;
   }
   .caption-h1 {

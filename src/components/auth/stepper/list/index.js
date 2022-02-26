@@ -1,4 +1,5 @@
 import React from "react";
+import { useCart } from "react-use-cart";
 import {
   Divider,
   List,
@@ -9,6 +10,10 @@ import {
 import "./List.css";
 
 export default function _ProductLists() {
+  const { items, cartTotal } = useCart();
+  function numberWithCommas(x) {
+    return `₦${x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+  }
   return (
     <div>
       <List
@@ -16,18 +21,17 @@ export default function _ProductLists() {
         component="nav"
         aria-label="main mailbox folders"
       >
-        <Typography className="list-header">Your Orders</Typography>
-        <ListItem className="list-flex">
-          <ListItemText className="medium-gray-text" primary="Iphone 12" />
-          <ListItemText className="medium-gray-text" primary="$100.00" />
-        </ListItem>
-        <ListItem className="list-flex">
-          <ListItemText
-            className="medium-gray-text"
-            primary="Ipad 16 min air"
-          />{" "}
-          <ListItemText className="medium-gray-text" primary="$100.00" />
-        </ListItem>
+        <Typography className="list-header">Summary</Typography>
+        {items.map((data) => (
+          <ListItem className="list-flex">
+            <ListItemText className="medium-gray-text" primary={data.title} />
+            <ListItemText
+              className="medium-gray-text"
+              primary={`${numberWithCommas(data.price)} (${data.quantity})`}
+            />
+          </ListItem>
+        ))}
+
         <Divider />
         <ListItem className="list-flex">
           <ListItemText className="small-gray-text" primary="Shipping" />{" "}
@@ -40,7 +44,10 @@ export default function _ProductLists() {
         <Divider />
         <ListItem className="list-flex">
           <ListItemText style={{ color: "#EB5757" }} primary="Total" />{" "}
-          <ListItemText style={{ color: "#EB5757" }} primary="$150.00" />
+          <ListItemText
+            style={{ color: "#EB5757" }}
+            primary={numberWithCommas(cartTotal)}
+          />
         </ListItem>
       </List>
     </div>

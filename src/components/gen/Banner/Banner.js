@@ -1,7 +1,7 @@
 import { Button, Grid, Typography } from "@material-ui/core";
 import React from "react";
 import "./Banner.css";
-import bannerImg from "../../../assets/image.svg";
+import bannerImg from "../../../assets/products/headset.png";
 import { Link } from "react-router-dom";
 export default function _Banner() {
   return (

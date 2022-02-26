@@ -2,31 +2,124 @@ import {
   Avatar,
   Button,
   Container,
+  FormControl,
   Grid,
+  InputLabel,
+  makeStyles,
+  MenuItem,
   Paper,
+  Select,
+  TextField,
   Typography,
 } from "@material-ui/core";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import _ProductLists from "./list";
-import DeliveryTextField from "./textfields/DeliveryTextField";
 import "./Stepper.css";
 import _CardInfoTextField from "./textfields/CardInfo";
-import AddressForm from "../../../modals/payment/Address";
-export default function PaymentStepper() {
-  const [addressModal, setAddressModal] = React.useState(false);
-  const handleAddressForm = () => {
-    setAddressModal(true);
+import { AuthContext } from "../../../context/providers/AuthContext";
+import { getApiWithToken } from "../../../requestMethods";
+import { PaystackButton } from "react-paystack";
+import { useCart } from "react-use-cart";
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    marginBottom: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+  disable: {
+    width: "100%",
+    padding: 10,
+    height: 55,
+    background: "#777",
+    opacity: 0.8,
+    pointerEvents: "none",
+    display: "block",
+    border: "none",
+    outline: "none",
+    borderRadius: theme.spacing(1),
+    color: "#fff",
+    fontFamily: "poppins",
+    cursor: "none",
+  },
+  btn: {
+    width: "100%",
+    padding: 10,
+    height: 55,
+    background: "#2B3445",
+    display: "block",
+    border: "none",
+    outline: "none",
+    borderRadius: theme.spacing(1),
+    color: "#fff",
+    fontFamily: "poppins",
+    cursor: "pointer",
+  },
+}));
+export default function PaymentStepper({ state }) {
+  const { cartTotal, items } = useCart();
+  const navigate = useNavigate();
+  const classes = useStyles();
+  const { isAuthenticated } = React.useContext(AuthContext);
+  const { payload } = isAuthenticated;
+  const [user, setUser] = React.useState(payload.user);
+
+  const publicKey = "pk_test_e82c88b45e3f9a3c0733f950c24dd4cf011e1545";
+  const productIDS = [];
+  items.map((data) => productIDS.push(data.id));
+
+  const [city, setCity] = React.useState("");
+  const [phone, setPhone] = React.useState("");
+  const [junction, setJunction] = React.useState("");
+  const [streetName, setStreetName] = React.useState("");
+
+  const componentProps = {
+    email: user.email,
+    amount: cartTotal * 100,
+    metadata: {
+      name: user.username,
+      phone: phone,
+      junction,
+      streetName,
+      junction,
+      city,
+    },
+    publicKey,
+    text: "Place Order",
+    onSuccess: () => {
+      getApiWithToken
+        .post("/order/create", {
+          userID: user._id,
+          productId: productIDS,
+          amt: cartTotal,
+          address: city,
+          junction: junction,
+          phone: phone,
+        })
+        .then((res) => {
+          console.log("Data", res.data);
+          navigate("/");
+        })
+        .catch((e) => console.log(e));
+    },
   };
-  const handleClose = () => {
-    setAddressModal(false);
+  const handlePhone = (event) => {
+    setPhone(event.target.value);
   };
+  const handleCity = (e) => {
+    setCity(e.target.value);
+  };
+  const handleJunction = (e) => {
+    setJunction(e.target.value);
+  };
+  const handleStreetName = (e) => {
+    setStreetName(e.target.value);
+  };
+
   return (
     <div>
-      <AddressForm
-        handleClick1={handleAddressForm}
-        handleClose={handleClose}
-        addressModal={addressModal}
-      />
       <Container>
         <Grid container spacing={2} justifyContent="space-between">
           <Grid item xs={12} md={8}>
@@ -37,27 +130,27 @@ export default function PaymentStepper() {
                     <div className="container-card-header">
                       <Avatar className="container-card-avatar">1</Avatar>
                       <Typography className="container-card-haeder-text">
-                        Delivery Date and Time
+                        Set Default Delivery Phone number
                       </Typography>
                     </div>
 
                     <Grid container spacing={2} justifyContent="center">
-                      <Grid item xs={12} md={6}>
-                        <DeliveryTextField
-                          label={"Delivery Date"}
-                          type={"delivery_date"}
-                        />
-                      </Grid>
-                      <Grid item xs={12} md={6}>
-                        <DeliveryTextField
-                          label={"Delivery Date"}
-                          type={"delivery_time"}
+                      <Grid item xs={12} md={12}>
+                        <TextField
+                          variant="outlined"
+                          type="number"
+                          fullWidth
+                          value={phone}
+                          onChange={handlePhone}
+                          autoFocus
+                          label={"Phone number"}
                         />
                       </Grid>
                     </Grid>
                   </div>
                 </Paper>
               </Grid>
+              {/* ================ DELIVERY ============= */}
               <Grid item xs={12} md={12}>
                 <Paper elevation={5} className="paper">
                   <div className="container-card">
@@ -65,45 +158,91 @@ export default function PaymentStepper() {
                       <div>
                         <Avatar className="container-card-avatar">2</Avatar>
                         <Typography className="container-card-haeder-text">
-                          Delivery Date and TimeDelivery Address
+                          Delivery Address
                         </Typography>
                       </div>
-                      <Button
-                        onClick={handleAddressForm}
-                        size="medium"
-                        variant="outlined"
-                        color="primary"
-                      >
-                        Add new Address
-                      </Button>
                     </div>
-                    <Typography className="container-card-address">
-                      Oshodi 12 Agede Road
-                    </Typography>
+                    <Grid container>
+                      <Grid item xs={12} md={12}>
+                        <TextField
+                          onChange={handleCity}
+                          value={city}
+                          label="Your current city"
+                          type="text"
+                          fullWidth
+                          variant="outlined"
+                          required
+                          style={{ marginBottom: 10 }}
+                          helperText="Make sure your address is valid"
+                        />
+                      </Grid>
+                      <Grid item xs={12} md={12}>
+                        <FormControl
+                          variant="outlined"
+                          className={classes.formControl}
+                          fullWidth
+                        >
+                          <InputLabel id="location">
+                            Choose closes junction
+                          </InputLabel>
+                          <Select
+                            labelId="location"
+                            id="outline"
+                            value={junction}
+                            onChange={handleJunction}
+                            label="Choose closes junction"
+                          >
+                            <MenuItem value="">
+                              <em>None</em>
+                            </MenuItem>
+                            <MenuItem value={"ikorodu"}>Ikorodu</MenuItem>
+                            <MenuItem value={"mushi"}>Mushi</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={12} md={12}>
+                        <TextField
+                          onChange={handleStreetName}
+                          value={streetName}
+                          label="Street Name"
+                          type="text"
+                          fullWidth
+                          variant="outlined"
+                          required
+                          helperText="e.g jimo..."
+                        />
+                      </Grid>
+                      {/* <Grid item xs={12} md={12}></Grid> */}
+                    </Grid>
                   </div>
-                </Paper>
-              </Grid>
-              <Grid item xs={12} md={12}>
-                <Paper elevation={5} className="paper">
-                  <div className="container-card">
-                    <div className="container-card-header">
-                      <Avatar className="container-card-avatar">3</Avatar>
-                      <Typography className="container-card-haeder-text">
-                        Payment Details
-                        <Typography className="small-gray-text">
-                          Enter card information
-                        </Typography>
-                      </Typography>
-                    </div>
-                    <_CardInfoTextField />
-                  </div>
+                  <Grid item xs={12} md={4}>
+                    <PaystackButton
+                      className={
+                        city === "" ||
+                        junction === "" ||
+                        phone === "" ||
+                        streetName === ""
+                          ? classes.disable
+                          : classes.btn
+                      }
+                      {...componentProps}
+                    />
+                  </Grid>
                 </Paper>
               </Grid>
             </Grid>
+
+            {/* ============ payment method ================ */}
           </Grid>
+
           <Grid item xs={12} md={4}>
             <div style={{ width: "100%", background: "#fff" }}>
-              <_ProductLists />
+              <_ProductLists
+                delivered={state.delivered}
+                pending={state.awaitingDelivery}
+                orders={state.allOrders}
+                payment={state.orders}
+              />
             </div>
           </Grid>
         </Grid>

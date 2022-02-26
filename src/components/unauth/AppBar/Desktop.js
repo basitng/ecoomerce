@@ -13,36 +13,49 @@ import {
   Search,
   ShoppingCartOutlined,
 } from "@material-ui/icons";
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { SearchContext } from "../../../context/providers/SearchContext";
 import AutocompleteModal from "../../../modals/Autocomplete/index";
 import CartModal from "../../../modals/Cart";
 import CategoryDropdown from "../../../modals/category";
 import LoginForm from "../../../modals/Login";
+import { getApi } from "../../../requestMethods";
 import "../styles/Desktop.css";
 
-export default function Desktop() {
+export default function Desktop({ display, totalItems }) {
   const [loginModal, setLoginModal] = React.useState(false);
+  const { dispatchSearch } = useContext(SearchContext);
   const [state, setState] = React.useState(false);
   const [Active, setActive] = React.useState(false);
   const [search, setSearch] = React.useState("");
   const [cartModal, setCartModal] = React.useState(false);
+  const [data, setData] = React.useState();
+  const [Loading, setLoading] = React.useState(false);
 
   const handleSearch = (e) => {
     setActive(true);
+    setLoading(true);
     setSearch(e.target.value);
+    if (search === "") {
+      setData("");
+    }
+    getApi
+      .get(`/query/${search}`)
+      .then(({ data }) => {
+        setLoading(false);
+        setData(data);
+        dispatchSearch({ type: "active", payload: data });
+      })
+      .catch((e) => {
+        setLoading(true);
+      });
   };
   const handleActive = () => {
     setActive(true);
   };
   const handleLoginClick = () => {
     setLoginModal(true);
-  };
-  const handleCat = () => {
-    setState(true);
-    if (state) {
-      setState(false);
-    }
   };
   const handleCartModal = () => {
     setCartModal(true);
@@ -64,13 +77,14 @@ export default function Desktop() {
         setLoginModal={setLoginModal}
       />
 
-      <CartModal
-        cartModal={cartModal}
-        setCartModal={setCartModal}
-        handleClick3={handleCartModal}
-      />
       <div className="appBar">
-        <AppBar elevation={2} color="inherit">
+        <AppBar
+          elevation={0}
+          color="inherit"
+          style={
+            display === "none" ? { display: "none" } : { display: "block" }
+          }
+        >
           <Toolbar>
             <div className="logo">
               <h1>
@@ -88,27 +102,27 @@ export default function Desktop() {
                 style={{ fontFamily: "poppins" }}
                 onChange={handleSearch}
                 onFocus={handleActive}
-                onBlur={() => setActive(false)}
+                onBlur={() => {
+                  if (search === "") {
+                    setActive(false);
+                    setData("");
+                  } else {
+                    setActive(true);
+                  }
+                }}
               />
               <Search className="icons" color="primary" />
-              <AutocompleteModal active={Active} setActive={setActive} />
+              <AutocompleteModal
+                data={data}
+                active={Active}
+                setActive={setActive}
+              />
             </div>
             {/* end search bar */}
             <ul className="ul-items">
-              <a className="cat-parent">
-                <CategoryDropdown clicked={handleCat} state={state} />
-                <Button
-                  onClick={handleCat}
-                  style={{ background: grey[200] }}
-                  startIcon={<CategoryOutlined />}
-                  endIcon={<ExpandMore />}
-                >
-                  Category
-                </Button>
-              </a>
               <a>
                 <IconButton onClick={handleCartModal}>
-                  <Badge badgeContent={3} color="secondary">
+                  <Badge badgeContent={totalItems} color="secondary">
                     <ShoppingCartOutlined />
                   </Badge>
                 </IconButton>

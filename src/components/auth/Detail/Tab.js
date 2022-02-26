@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
@@ -6,10 +6,13 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import { Button, Grid, IconButton, TextField } from "@material-ui/core";
+import { Button, CircularProgress, Grid, TextField } from "@material-ui/core";
 import ProductReviewCard from "./Card";
-import { StarBorderOutlined } from "@material-ui/icons";
-import { orange } from "@material-ui/core/colors";
+import { Rating } from "@material-ui/lab";
+import { getApi } from "../../../requestMethods";
+import LinearIndeterminate from "../../../loader/Progress";
+import { AuthContext } from "../../../context/providers/AuthContext";
+import { Link } from "react-router-dom";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -50,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "transparent",
   },
   p: {
-    width: "20%",
+    width: "50%",
     display: "block",
     color: "#555",
     fontSize: 15,
@@ -63,48 +66,50 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function DetailTab() {
+export default function DetailTab({ desc, id }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [review, setReview] = React.useState("");
-  const [ratingValue, setRatingValue] = React.useState(0);
-  const [ratingColor, setRatingColor] = React.useState([]);
-
-  const handleReviewChange = (e) => {
-    setReview(e.target.value);
-  };
+  const [Loading, setLoading] = React.useState(null);
+  const [rating, setRating] = React.useState(0);
+  const { isAuthenticated } = useContext(AuthContext);
+  const [data, setData] = React.useState();
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoading(true);
+
+    getApi
+      .post(`/review/create`, {
+        productId: id,
+        review: review,
+        rating: rating,
+        user: isAuthenticated.payload.user.username,
+      })
+      .then(() => {
+        document.location.reload();
+        setLoading(false);
+      })
+      .catch((e) => setLoading(true));
   };
+  useEffect(() => {
+    getApi
+      .get(`/review/${id}`)
+      .then(({ data }) => {
+        setData(data.data);
+        setLoading(false);
+      })
+      .catch((e) => setLoading(true));
+  }, [0]);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const handleRateBtn1 = () => {
-    setRatingValue(+1);
-    setRatingColor(...ratingColor, 1);
-  };
-  const handleRateBtn2 = () => {
-    setRatingValue(+1);
-    setRatingColor(...ratingColor, 2);
-  };
-  const handleRateBtn3 = () => {
-    setRatingValue(+1);
-    setRatingColor(...ratingColor, 3);
-  };
-  const handleRateBtn4 = () => {
-    setRatingValue(+1);
-    setRatingColor(...ratingColor, 4);
-  };
-  const handleRateBtn5 = () => {
-    setRatingValue(+1);
-    setRatingColor(...ratingColor, 5);
-  };
+  // ADD ALL RATING TOGETHER
 
-  console.log(ratingValue);
-  useEffect(() => {});
   return (
     <div className={classes.root}>
+      {Loading === true && <LinearIndeterminate />}
       <AppBar
         position="static"
         elevation={0}
@@ -127,20 +132,30 @@ export default function DetailTab() {
             Specification
           </Typography>
           <Typography variant="p" className={classes.p} color="secondary">
-            Brand: Beats. Model: S450 Wireless Bluetooth Headset FM Frequency
-            Response: 87.5 – 108 MHz Feature: FM Radio, Card Supported (Micro SD
-            / TF) Made in China
+            {desc}
           </Typography>
         </div>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Grid container spacing={2}>
-          <Grid item xs={12} md={12}>
-            <ProductReviewCard type={"text"} avatar={"B"} />
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <ProductReviewCard type={"text"} avatar={"C"} />
-          </Grid>
+          {!data ? (
+            <CircularProgress thickness={8} size={25} color="secondary" />
+          ) : (
+            <>
+              {data &&
+                data.map(({ review, rating, user }) => (
+                  <Grid item xs={12} md={12}>
+                    <ProductReviewCard
+                      type={"text"}
+                      desc={review}
+                      rating={rating}
+                      avatar={user[0]}
+                      user={user}
+                    />
+                  </Grid>
+                ))}
+            </>
+          )}
         </Grid>
         <Grid container spacing={2} className={classes.pushDown}>
           <Grid item xs={12} md={12}>
@@ -159,39 +174,15 @@ export default function DetailTab() {
               Your Rating *
             </Typography>
             <div className="detail-flex">
-              <IconButton onClick={handleRateBtn1} size="small">
-                <StarBorderOutlined className={classes.icon} />
-              </IconButton>
-              <IconButton
-                // style={{ color: ratingColor === 2 ? orange[900] : "" }}
-                onClick={handleRateBtn2}
-                size="small"
-              >
-                <StarBorderOutlined className={classes.icon} />
-              </IconButton>
-              <IconButton
-                // style={{ color: ratingColor === 3 ? orange[900] : "" }}
-                onClick={handleRateBtn3}
-                size="small"
-              >
-                <StarBorderOutlined className={classes.icon} />
-              </IconButton>
-              <IconButton
-                // style={{ color: ratingColor === 4 ? orange[900] : "" }}
-                onClick={handleRateBtn4}
-                size="small"
-              >
-                <StarBorderOutlined className={classes.icon} />
-              </IconButton>
-              <IconButton
-                // style={{ color: ratingColor === 5 ? orange[900] : "" }}
-                onClick={handleRateBtn5}
-                size="small"
-              >
-                <StarBorderOutlined className={classes.icon} />
-              </IconButton>
+              <Rating
+                name="simple-controlled"
+                value={rating}
+                onChange={(event, newValue) => {
+                  setRating(newValue);
+                }}
+              />
             </div>
-            <form onSubmit={handleSubmit} className={classes.form}>
+            <form className={classes.form}>
               <TextField
                 multiline
                 label="Write your review"
@@ -200,23 +191,55 @@ export default function DetailTab() {
                 fullWidth
                 rows={3}
                 value={review}
-                onChange={handleReviewChange}
+                onChange={(e) => setReview(e.target.value)}
               />
               <br />
               <br />
-              {review === "" ? (
-                <Button
-                  variant="contained"
-                  disabled
-                  size="large"
-                  color="secondary"
-                >
-                  Submit
-                </Button>
+              {isAuthenticated.isLoggedIn ? (
+                <>
+                  {review === "" ? (
+                    <Button
+                      variant="contained"
+                      disabled
+                      size="large"
+                      color="secondary"
+                    >
+                      Submit
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={handleSubmit}
+                      variant="contained"
+                      size="large"
+                      color="secondary"
+                    >
+                      Submit
+                    </Button>
+                  )}
+                </>
               ) : (
-                <Button variant="contained" size="large" color="secondary">
-                  Submit
-                </Button>
+                <>
+                  {review === "" ? (
+                    <Button
+                      variant="contained"
+                      disabled
+                      size="large"
+                      color="secondary"
+                    >
+                      Login in first
+                    </Button>
+                  ) : (
+                    <Button
+                      component={Link}
+                      to="/"
+                      variant="contained"
+                      size="large"
+                      color="secondary"
+                    >
+                      Login in first
+                    </Button>
+                  )}
+                </>
               )}
             </form>
           </Grid>
