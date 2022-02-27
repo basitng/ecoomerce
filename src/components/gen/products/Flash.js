@@ -33,13 +33,6 @@ export default function FlashProduct({
     addItem(cart);
   };
 
-  React.useEffect(async () => {
-    await getApi
-      .post("/cart", { productId: cart })
-      .then(({ data }) => setLoading(false))
-      .catch((e) => setLoading(true));
-  }, [handleAddToCart]);
-
   return (
     <React.Fragment>
       <Grid item xs={12} md={12}>

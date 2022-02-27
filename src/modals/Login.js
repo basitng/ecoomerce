@@ -46,11 +46,11 @@ export default function LoginForm({
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    setTimeout(() => setSubmitted(false), 3000);
     e.preventDefault();
     setSubmitted(true);
-    await axios
-      .post("http://localhost:5000/auth/login/", {
+    setTimeout(() => setSubmitted(false), 3000);
+    await authAPI
+      .post("/login", {
         email: email,
         password: pwd,
       })
