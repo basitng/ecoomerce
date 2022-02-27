@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import "./List.css";
 
-export default function _ProductLists() {
+export default function _ProductLists({ location }) {
   const { items, cartTotal } = useCart();
   function numberWithCommas(x) {
     return `₦${x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
@@ -35,18 +35,23 @@ export default function _ProductLists() {
         <Divider />
         <ListItem className="list-flex">
           <ListItemText className="small-gray-text" primary="Shipping" />{" "}
-          <ListItemText className="small-gray-text" primary="$10.00" />
+          <ListItemText
+            className="small-gray-text"
+            primary={numberWithCommas(location)}
+          />
         </ListItem>
+
+        <Divider />
         <ListItem className="list-flex">
-          <ListItemText className="small-gray-text" primary="Discount" />{" "}
-          <ListItemText className="small-gray-text" primary="$50.00" />
+          <ListItemText primary="Actual Price" />{" "}
+          <ListItemText primary={numberWithCommas(cartTotal)} />
         </ListItem>
         <Divider />
         <ListItem className="list-flex">
           <ListItemText style={{ color: "#EB5757" }} primary="Total" />{" "}
           <ListItemText
             style={{ color: "#EB5757" }}
-            primary={numberWithCommas(cartTotal)}
+            primary={numberWithCommas(cartTotal + location)}
           />
         </ListItem>
       </List>

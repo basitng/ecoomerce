@@ -9,6 +9,7 @@ import {
   Paper,
   Tab,
   Tabs,
+  Typography,
 } from "@material-ui/core";
 
 import "swiper/css";
@@ -59,6 +60,8 @@ const useStyles = makeStyles((theme) => ({
     shadow: theme.shadows[5],
   },
   Container: {
+    marginTop: "12rem",
+    marginBottom: "5rem",
     [theme.breakpoints.down("xs")]: {
       width: "100% !important",
       padding: 0,
@@ -91,8 +94,13 @@ export default function SearchPage() {
     <div className="container">
       {isLoading === true ? <LinearIndeterminate /> : ""}
       <Container className={classes.Container}>
-        <FlashHeader />
-
+        <Typography
+          variant="h5"
+          color="secondary"
+          style={{ fontWeight: 900, padding: 10 }}
+        >
+          Search Result.
+        </Typography>
         <Swiper
           breakpoints={{
             0: {

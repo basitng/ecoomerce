@@ -16,11 +16,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import _ProductLists from "./list";
 import "./Stepper.css";
-import _CardInfoTextField from "./textfields/CardInfo";
 import { AuthContext } from "../../../context/providers/AuthContext";
 import { getApiWithToken } from "../../../requestMethods";
 import { PaystackButton } from "react-paystack";
 import { useCart } from "react-use-cart";
+import { LagosLocations } from "../../../config/Location";
 const useStyles = makeStyles((theme) => ({
   formControl: {
     marginBottom: theme.spacing(1),
@@ -71,20 +71,20 @@ export default function PaymentStepper({ state }) {
   items.map((data) => productIDS.push(data.id));
 
   const [city, setCity] = React.useState("");
-  const [phone, setPhone] = React.useState("");
+  const [phone, setPhone] = React.useState(`0${user.phone_number}`);
   const [junction, setJunction] = React.useState("");
-  const [streetName, setStreetName] = React.useState("");
+  const [streetName, setStreetName] = React.useState(user.address);
 
   const componentProps = {
     email: user.email,
-    amount: cartTotal * 100,
+    amount: (cartTotal + junction) * 100,
     metadata: {
       name: user.username,
       phone: phone,
       junction,
       streetName,
       junction,
-      city,
+      city: "lagos",
     },
     publicKey,
     text: "Place Order",
@@ -93,8 +93,8 @@ export default function PaymentStepper({ state }) {
         .post("/order/create", {
           userID: user._id,
           productId: productIDS,
-          amt: cartTotal,
-          address: city,
+          amt: cartTotal * junction,
+          address: "Lagos State",
           junction: junction,
           phone: phone,
         })
@@ -120,7 +120,7 @@ export default function PaymentStepper({ state }) {
 
   return (
     <div>
-      <Container>
+      <Container style={{ marginTop: "8rem" }}>
         <Grid container spacing={2} justifyContent="space-between">
           <Grid item xs={12} md={8}>
             <Grid container spacing={3}>
@@ -166,12 +166,13 @@ export default function PaymentStepper({ state }) {
                       <Grid item xs={12} md={12}>
                         <TextField
                           onChange={handleCity}
-                          value={city}
+                          value={"Lagos"}
                           label="Your current city"
                           type="text"
                           fullWidth
                           variant="outlined"
                           required
+                          disabled
                           style={{ marginBottom: 10 }}
                           helperText="Make sure your address is valid"
                         />
@@ -192,11 +193,15 @@ export default function PaymentStepper({ state }) {
                             onChange={handleJunction}
                             label="Choose closes junction"
                           >
-                            <MenuItem value="">
-                              <em>None</em>
-                            </MenuItem>
-                            <MenuItem value={"ikorodu"}>Ikorodu</MenuItem>
-                            <MenuItem value={"mushi"}>Mushi</MenuItem>
+                            {LagosLocations.map((docs) => (
+                              <MenuItem
+                                key={docs.id}
+                                name={docs.location}
+                                value={docs.amount}
+                              >
+                                {docs.location}
+                              </MenuItem>
+                            ))}
                           </Select>
                         </FormControl>
                       </Grid>
@@ -218,10 +223,7 @@ export default function PaymentStepper({ state }) {
                   <Grid item xs={12} md={4}>
                     <PaystackButton
                       className={
-                        city === "" ||
-                        junction === "" ||
-                        phone === "" ||
-                        streetName === ""
+                        junction === "" || phone === "" || streetName === ""
                           ? classes.disable
                           : classes.btn
                       }
@@ -237,12 +239,7 @@ export default function PaymentStepper({ state }) {
 
           <Grid item xs={12} md={4}>
             <div style={{ width: "100%", background: "#fff" }}>
-              <_ProductLists
-                delivered={state.delivered}
-                pending={state.awaitingDelivery}
-                orders={state.allOrders}
-                payment={state.orders}
-              />
+              <_ProductLists location={junction} />
             </div>
           </Grid>
         </Grid>

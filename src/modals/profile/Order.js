@@ -12,6 +12,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import React, { useEffect } from "react";
+import { AuthContext } from "../../context/providers/AuthContext";
 import { getApiWithToken } from "../../requestMethods";
 
 const useStyles = makeStyles((theme) => ({
@@ -35,6 +36,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function OrderModal({ handleOpen, setHandleOpen }) {
   const isOnline = navigator.onLine;
+  const { isAuthenticated } = React.useContext(AuthContext);
+  const { user } = isAuthenticated.payload;
+
   const [open, setOpen] = React.useState(false);
   const [data, setData] = React.useState();
   const [Loading, setLoading] = React.useState(true);
@@ -51,12 +55,11 @@ export default function OrderModal({ handleOpen, setHandleOpen }) {
       setHandleOpen(false);
     }
     if (isOnline === true) {
-      console.log("howfar", isOnline);
       await getApiWithToken
-        .get("/order")
+        .get(`/order/find/${user._id}`)
         .then(({ data }) => {
           setLoading(false);
-          setData(data);
+          setData(data.ordersRaw);
         })
         .catch((e) => {
           console.log(e);
