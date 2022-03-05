@@ -69,9 +69,10 @@
   left: 2%;
   background: #eb5757;
   color: white;
-  padding: 3px;
+  padding: 10px;
   z-index: 20;
-  width: 50px;
+
+  width: auto;
   border-radius: 48px;
   text-align: center;
   font-size: 12px;

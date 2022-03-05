@@ -6,7 +6,7 @@ import { Email, Facebook } from "@material-ui/icons";
 import { blue, red } from "@material-ui/core/colors";
 import { authAPI } from "../../../requestMethods";
 import { AuthContext } from "../../../context/providers/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function SignupPage() {
   const navigate = useNavigate();
@@ -184,7 +184,10 @@ export default function SignupPage() {
           </Button>
           <br />
           <Typography style={{ fontSize: 14 }} color="secondary">
-            Have an account? <b>Login</b>
+            Have an account?{" "}
+            <b>
+              <Link to="/">Login</Link>
+            </b>
           </Typography>
         </div>
       </Container>

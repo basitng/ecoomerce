@@ -70,7 +70,7 @@ export default function DetailTab({ desc, id }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [review, setReview] = React.useState("");
-  const [Loading, setLoading] = React.useState(null);
+  const [Loading, setLoading] = React.useState(false);
   const [rating, setRating] = React.useState(0);
   const { isAuthenticated } = useContext(AuthContext);
   const [data, setData] = React.useState();
@@ -98,7 +98,7 @@ export default function DetailTab({ desc, id }) {
         setData(data.data);
         setLoading(false);
       })
-      .catch((e) => setLoading(true));
+      .catch((e) => setLoading(false));
   }, [0]);
 
   const handleChange = (event, newValue) => {

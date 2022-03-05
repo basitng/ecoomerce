@@ -93,10 +93,11 @@ export default function PaymentStepper({ state }) {
         .post("/order/create", {
           userID: user._id,
           productId: productIDS,
-          amt: cartTotal * junction,
+          amt: cartTotal + junction,
           address: "Lagos State",
           junction: junction,
           phone: phone,
+          shipping: junction,
         })
         .then((res) => {
           console.log("Data", res.data);

@@ -14,12 +14,13 @@ export default function DiscountProduct({
   category,
 }) {
   const { addItem } = useCart();
+  const discountAmt = (discount / 100) * price;
   const [cart, setCart] = useState({
     id: id,
     img: img,
     title: title,
     desc: desc,
-    price: price,
+    price: price - discountAmt,
     quantity: 1,
   });
   function numberWithCommas(x) {
@@ -32,10 +33,10 @@ export default function DiscountProduct({
 
   return (
     <React.Fragment>
-      <Grid item xs={12} md={3}>
+      <Grid key={id} item xs={12} md={3}>
         <Paper elevation={1}>
           <div className="flash-card">
-            <div className="status">{category}</div>
+            <div className="status">{`%${discount} off`}</div>
             <Link className="detailLinks" to={`detail/${id}`}>
               <div className="flash-card-img">
                 <img src={img} alt="" className="img" />
@@ -43,7 +44,10 @@ export default function DiscountProduct({
             </Link>
             <div className="flash-card-body">
               <Typography variant="h6" className="product-name">
-                {price}
+                {title}
+              </Typography>
+              <Typography variant="h6" className="product-name">
+                {numberWithCommas(price)}
               </Typography>
               <div className="flash-card-rating">
                 <Star className="rating-icon" />
@@ -59,7 +63,7 @@ export default function DiscountProduct({
                     className="discount-price"
                     color="primary"
                   >
-                    {discount}
+                    {numberWithCommas(price - discountAmt)}
                   </Typography>
                   <Typography
                     variant="p"

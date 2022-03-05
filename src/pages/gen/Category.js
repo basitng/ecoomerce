@@ -10,6 +10,9 @@ import _Banner from "../../components/gen/Banner/Banner";
 import "../../components/gen/products/indicator.css";
 import { getApi } from "../../requestMethods";
 import ProductsPage from "./Products";
+import { Grid } from "@material-ui/core";
+import ArrivalProduct from "../../components/gen/products/Arrival";
+import _Skeleton from "../../loader/Skeleton";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -121,7 +124,60 @@ export default function _Categories() {
         </React.Fragment>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <Grid container spacing={2}>
+          {!isLoading ? (
+            <React.Fragment>
+              <>
+                {data &&
+                  data.map(
+                    (data) =>
+                      data.category === "Mobile phone" && (
+                        <Grid item xs={12} md={3}>
+                          <ArrivalProduct
+                            title={data.name}
+                            img={data.frontPic}
+                            category={""}
+                            price={data.price}
+                            id={data._id}
+                            desc={data.desc}
+                          />
+                        </Grid>
+                      )
+                  )}
+              </>
+              <>
+                {data &&
+                  data.map(
+                    (data) =>
+                      data.category === "New" && (
+                        <Grid item xs={12} md={3}>
+                          <ArrivalProduct
+                            title={data.name}
+                            img={data.frontPic}
+                            category={""}
+                            price={data.price}
+                            id={data._id}
+                            desc={data.desc}
+                          />
+                        </Grid>
+                      )
+                  )}{" "}
+              </>
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <Grid container spacing={2}>
+                {Array(6)
+                  .fill(Math.random() * 100)
+                  .map(() => (
+                    <Grid item xs={12} md={3}>
+                      <_Skeleton />
+                    </Grid>
+                  ))}
+              </Grid>
+            </React.Fragment>
+          )}
+        </Grid>
       </TabPanel>
       <TabPanel value={value} index={2}>
         Item Three

@@ -1,11 +1,14 @@
 import { Grid, Typography } from "@material-ui/core";
 import { Facebook, Instagram, Twitter } from "@material-ui/icons";
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import LoginForm from "../../../modals/Login";
 import "./Footer.css";
+import { AuthContext } from "../../../context/providers/AuthContext";
 
 export default function Footer() {
+  const { isAuthenticated } = useContext(AuthContext);
+  const { isLoggedIn } = isAuthenticated;
   const [loginModal, setLoginModal] = React.useState(false);
   const handleLoginClick = () => {
     setLoginModal(true);
@@ -37,6 +40,7 @@ export default function Footer() {
                   Home{" "}
                 </Link>
               </li>
+
               <li>
                 {" "}
                 {/* <Link className="link2" to="/">
@@ -49,19 +53,38 @@ export default function Footer() {
                   Terms & conditions
                 </Link>
               </li>
-              <li
-                style={{ paddingLeft: 10, cursor: "pointer" }}
-                onClick={handleLoginClick}
-              >
-                {" "}
-                login
-              </li>
-              <li>
-                {" "}
-                <Link className="link2" to="/signup">
-                  Create account
-                </Link>
-              </li>
+              {isLoggedIn ? (
+                <>
+                  <li>
+                    {" "}
+                    <Link className="link2" to="/profile">
+                      Profile{" "}
+                    </Link>
+                  </li>
+                  <li>
+                    {" "}
+                    <Link to="/" className="link2">
+                      Logout{" "}
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li
+                    style={{ paddingLeft: 10, cursor: "pointer" }}
+                    onClick={handleLoginClick}
+                  >
+                    {" "}
+                    login
+                  </li>
+                  <li>
+                    {" "}
+                    <Link className="link2" to="/signup">
+                      Create account
+                    </Link>
+                  </li>
+                </>
+              )}
             </div>
           </Grid>
           <Grid item md={6} xs={12} className="footer-content2">
@@ -81,7 +104,7 @@ export default function Footer() {
             </Typography>
             <div className="footer-flex">
               <div className="social-wrapper">
-                <Facebook className="social-icon" />
+                <Facebook component={Link} to="" className="social-icon" />
               </div>
               <div className="social-wrapper">
                 <Twitter className="social-icon" />

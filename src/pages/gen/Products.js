@@ -1,15 +1,5 @@
 import React, { useState } from "react";
-import {
-  AppBar,
-  Box,
-  CircularProgress,
-  Container,
-  Grid,
-  makeStyles,
-  Paper,
-  Tab,
-  Tabs,
-} from "@material-ui/core";
+import { Container, Grid, makeStyles, Typography } from "@material-ui/core";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -32,25 +22,15 @@ import Service from "../../components/gen/products/Service";
 
 import FlashHeader from "../../components/gen/header/flashHeader";
 import FlashProduct from "../../components/gen/products/Flash";
-import img1 from "../../assets/products/iphone.png";
-import img2 from "../../assets/products/headset.png";
-import img3 from "../../assets/products/airpod.svg";
-import img4 from "../../assets/products/headset2.png";
 import ArrivalProduct from "../../components/gen/products/Arrival";
 import ArivalHeader from "../../components/gen/header/ArrivalHeader";
-import CategoryHeader from "../../components/gen/header/CategoryHeader";
-import Category from "../../components/gen/products/Category";
 import _Categories from "./Category";
 import _LinearBuffer from "../../loader/BufferProgress";
 
 import { getApi } from "../../requestMethods";
-import { Skeleton } from "@material-ui/lab";
 import LinearIndeterminate from "../../loader/Progress";
+import _Skeleton from "../../loader/Skeleton";
 const useStyles = makeStyles((theme) => ({
-  Skeleton: {
-    margin: theme.spacing(1),
-    borderRadius: theme.spacing(2),
-  },
   root: {
     marginTop: theme.spacing(11),
     flexGrow: 1,
@@ -72,20 +52,15 @@ export default function ProductsPage() {
   const classes = useStyles();
 
   React.useEffect(async () => {
-    try {
-      getApi
-        .get("/product")
-        .then(({ data }) => {
-          setData(data);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          setIsLoading(true);
-          console.log(error);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+    getApi
+      .get("/product")
+      .then(({ data }) => {
+        setData(data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setIsLoading(true);
+      });
   }, [0]);
   return (
     <div className="container">
@@ -110,19 +85,20 @@ export default function ProductsPage() {
         >
           {!isLoading ? (
             <React.Fragment>
-              {data.map((data) => (
-                <SwiperSlide key={data._id}>
-                  <FlashProduct
-                    img={data.frontPic}
-                    title={data.name}
-                    desc={data.desc}
-                    id={data._id}
-                    data={data}
-                    price={data.price}
-                    category={data.category}
-                  />
-                </SwiperSlide>
-              ))}
+              {data &&
+                data.map((data) => (
+                  <SwiperSlide key={data._id}>
+                    <FlashProduct
+                      img={data.frontPic}
+                      title={data.name}
+                      desc={data.desc}
+                      id={data._id}
+                      data={data}
+                      price={data.price}
+                      category={data.category}
+                    />
+                  </SwiperSlide>
+                ))}
             </React.Fragment>
           ) : (
             <React.Fragment>
@@ -130,87 +106,120 @@ export default function ProductsPage() {
                 .fill(Math.random() * 100)
                 .map((data) => (
                   <SwiperSlide>
-                    <Box>
-                      <Skeleton
-                        className={classes.Skeleton}
-                        variant="rect"
-                        width={"100%"}
-                        height={"40vh"}
-                      />
-
-                      <Skeleton
-                        className={classes.Skeleton}
-                        variant="rect"
-                        width={"100%"}
-                        height={"2vh"}
-                      />
-                      <Skeleton
-                        className={classes.Skeleton}
-                        variant="rect"
-                        width={"100%"}
-                        height={"2vh"}
-                      />
-                    </Box>
+                    <_Skeleton />
                   </SwiperSlide>
                 ))}
             </React.Fragment>
           )}
         </Swiper>
-        {data.filter(
-          (data) => data.category === "New Product" && <ArivalHeader />
-        )}
-        <Grid container spacing={2} justifyContent="center">
-          {data.filter(
-            (data) =>
-              data.category === "New Product" && (
-                <ArrivalProduct
-                  title={data.name}
-                  img={data.frontPic}
-                  category={data.category}
-                  price={data.price}
-                  id={data._id}
-                  desc={data.desc}
-                />
-              )
+        {<ArivalHeader />}
+        <Grid container spacing={2}>
+          {!isLoading ? (
+            <>
+              {data &&
+                data.map(
+                  (data) =>
+                    data.category === "New" && (
+                      <Grid item xs={12} md={3}>
+                        <ArrivalProduct
+                          title={data.name}
+                          img={data.frontPic}
+                          category={"New product"}
+                          price={data.price}
+                          id={data._id}
+                          desc={data.desc}
+                        />
+                      </Grid>
+                    )
+                )}
+            </>
+          ) : (
+            <React.Fragment>
+              <Grid container spacing={2}>
+                {Array(6)
+                  .fill(Math.random() * 100)
+                  .map(() => (
+                    <Grid item xs={12} md={3}>
+                      <_Skeleton />
+                    </Grid>
+                  ))}
+              </Grid>
+            </React.Fragment>
           )}
         </Grid>
 
-        {data.filter((data) => data.discount && <DiscountHeader />)}
+        {<DiscountHeader />}
         <Grid container spacing={2} style={{ position: "relative" }}>
-          {data.filter(
-            (data) =>
-              data.discount && (
-                <DiscountProduct
-                  title={data.name}
-                  img={data.frontPic}
-                  category={data.category}
-                  price={data.price}
-                  id={data._id}
-                  discount={data.discount}
-                  desc={data.desc}
-                />
-              )
+          {!isLoading ? (
+            <React.Fragment>
+              {data ? (
+                data.map(
+                  (data) =>
+                    data.discount && (
+                      <DiscountProduct
+                        title={data.name}
+                        img={data.frontPic}
+                        category={data.category}
+                        price={data.price}
+                        id={data._id}
+                        discount={data.discount}
+                        desc={data.desc}
+                      />
+                    )
+                )
+              ) : (
+                <Typography>No Discounts Available</Typography>
+              )}
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <Grid container spacing={2}>
+                {Array(8)
+                  .fill(Math.random() * 100)
+                  .map(() => (
+                    <Grid item xs={12} md={3}>
+                      <_Skeleton />
+                    </Grid>
+                  ))}
+              </Grid>
+            </React.Fragment>
           )}
         </Grid>
-        {data.filter(
-          (data) =>
-            data.category === "Mobile Phone" && (
-              <AnyProductHeader header={"Mobile Phones"} />
-            )
-        )}
+
+        {<AnyProductHeader header={"Mobile Phone"} />}
 
         <Grid container spacing={2}>
-          {data.filter(
-            (data) =>
-              data.category === "Mobile Phone" && (
-                <AnyProduct
-                  title={data.name}
-                  img={data.frontPic}
-                  category={data.category}
-                  price={data.price}
-                  id={data._id}
-                />
-              )
+          {!isLoading ? (
+            <React.Fragment>
+              {data ? (
+                data.map(
+                  (data) =>
+                    data.category === "Mobile phone" && (
+                      <AnyProduct
+                        title={data.name}
+                        img={data.frontPic}
+                        category={data.category}
+                        price={data.price}
+                        id={data._id}
+                      />
+                    )
+                )
+              ) : (
+                <Typography>No Mobile Phone Avaialable</Typography>
+              )}
+            </React.Fragment>
+          ) : (
+            <React.Fragment>
+              <Grid container spacing={2}>
+                {Array(8)
+                  .fill(Math.random() * 100)
+                  .map(() => (
+                    <Grid item xs={12} md={3}>
+                      <_Skeleton />
+                    </Grid>
+                  ))}
+              </Grid>
+            </React.Fragment>
           )}
         </Grid>
 
