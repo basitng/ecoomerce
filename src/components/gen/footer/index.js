@@ -1,7 +1,7 @@
 import { Grid, Typography } from "@material-ui/core";
 import { Facebook, Instagram, Twitter } from "@material-ui/icons";
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import LoginForm from "../../../modals/Login";
 import "./Footer.css";
 import { AuthContext } from "../../../context/providers/AuthContext";
@@ -9,21 +9,17 @@ import { AuthContext } from "../../../context/providers/AuthContext";
 export default function Footer() {
   const { isAuthenticated } = useContext(AuthContext);
   const { isLoggedIn } = isAuthenticated;
-  const [loginModal, setLoginModal] = React.useState(false);
-  const handleLoginClick = () => {
-    setLoginModal(true);
-  };
-  const handleClose = () => {
-    setLoginModal(false);
-  };
+  const location = useLocation();
   return (
     <React.Fragment>
-      <LoginForm
-        handleClick1={handleLoginClick}
-        handleClose={handleClose}
-        loginModal={loginModal}
-      />
-      <div className="footer">
+      <div
+        className="footer"
+        style={
+          location.pathname === "/login" || location.pathname === "/signup"
+            ? { display: "none" }
+            : { display: "block" }
+        }
+      >
         <Grid container spacing={5} justifyContent="center">
           <Grid item md={6} xs={12} className="footer-content1">
             <Typography variant="h4" style={{ color: "#fff", fontWeight: 900 }}>
@@ -72,7 +68,8 @@ export default function Footer() {
                 <>
                   <li
                     style={{ paddingLeft: 10, cursor: "pointer" }}
-                    onClick={handleLoginClick}
+                    component={Link}
+                    to="/login"
                   >
                     {" "}
                     login
@@ -116,8 +113,14 @@ export default function Footer() {
           </Grid>
         </Grid>
       </div>
-
-      <div className="developer">
+      <div
+        style={
+          location.pathname === "/login" || location.pathname === "/signup"
+            ? { display: "none" }
+            : { display: "block" }
+        }
+        className="developer"
+      >
         <Typography variant="p" className="dev-style">
           &copy; Copyright by georgetech created by basitng
         </Typography>

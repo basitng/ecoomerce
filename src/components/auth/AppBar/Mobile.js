@@ -16,6 +16,7 @@ import CartModal from "../../../modals/Cart";
 import AutocompleteModal from "../../../modals/Autocomplete/index";
 import { SearchContext } from "../../../context/providers/SearchContext";
 import { getApi } from "../../../requestMethods";
+import { useLocation } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -31,15 +32,11 @@ export default function Mobile() {
   const [cartModal, setCartModal] = React.useState(false);
   const [state, setState] = React.useState(false);
   const [Active, setActive] = React.useState(false);
-  const [loginModal, setLoginModal] = React.useState(false);
   const [search, setSearch] = React.useState("");
   const [data, setData] = React.useState();
   const [Loading, setLoading] = React.useState(false);
 
-  const handleLoginClick = () => {
-    setLoginModal(true);
-  };
-
+  const location = useLocation();
   const handleSearch = (e) => {
     setActive(true);
     setLoading(true);
@@ -68,17 +65,17 @@ export default function Mobile() {
       setCartModal(false);
     }
   };
-  const handleClose = () => {
-    setLoginModal(false);
-  };
 
   return (
-    <Paper elevation={0} className="mobile-appBar">
-      <LoginForm
-        handleClick={handleLoginClick}
-        handleClose={handleClose}
-        loginModal={loginModal}
-      />
+    <Paper
+      style={
+        location.pathname === "/login" || location.pathname === "/signup"
+          ? { display: "none" }
+          : { display: "block" }
+      }
+      elevation={0}
+      className="mobile-appBar"
+    >
       <CartModal
         cartModal={cartModal}
         setCartModal={setCartModal}

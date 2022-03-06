@@ -14,6 +14,7 @@ import InValidRoute from "./404";
 import { AuthContext } from "./context/providers/AuthContext";
 import _LinearBuffer from "./loader/BufferProgress";
 import SearchPage from "./pages/gen/Search";
+import Login from "./pages/unauth/login/Login";
 
 const theme = createTheme({
   palette: {
@@ -37,10 +38,14 @@ function App() {
     <ThemeProvider theme={theme}>
       <Routes>
         {user ? (
-          <Route path="/signup" element={<Navigate to="/" />} />
+          <>
+            <Route path="/signup" element={<Navigate to="/" />} />
+            <Route path="/login" element={<Navigate to="/" />} />
+          </>
         ) : (
           <>
             <Route path="/signup" element={<SignupPage />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/payment" element={<Navigate to="/" />} />
             <Route path="/profile" element={<Navigate to="/" />} />
           </>
@@ -51,7 +56,7 @@ function App() {
         <Route path="/detail/:id" element={<DetailPage />} />
         <Route path="/profile" element={<ProfilePage />} />
       </Routes>
-      <Navigation show_off_in={"signup"} />
+      <Navigation />
       <Footer />
     </ThemeProvider>
   );

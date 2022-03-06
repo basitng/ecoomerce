@@ -5,13 +5,13 @@ import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 
 import { Badge, Paper } from "@material-ui/core";
 import {
+  EmojiEmotionsOutlined,
   HomeOutlined,
   PersonAddOutlined,
   SettingsOutlined,
   ShoppingCartOutlined,
 } from "@material-ui/icons";
-import LoginForm from "../../../modals/Login";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import CartModal from "../../../modals/Cart";
 import { useCart } from "react-use-cart";
 
@@ -27,10 +27,9 @@ export default function BottomNav() {
   const classes = useStyles();
   const { totalItems } = useCart();
   const [value, setValue] = React.useState(0);
-  const [loginModal, setLoginModal] = React.useState(false);
   const [cartModal, setCartModal] = React.useState(false);
   const [state, setState] = React.useState(false);
-
+  const location = useLocation();
   const handleCat = () => {
     setState(true);
     if (state) {
@@ -43,20 +42,8 @@ export default function BottomNav() {
       setCartModal(false);
     }
   };
-  const handleLoginClick = () => {
-    setLoginModal(true);
-  };
-  const handleClose = () => {
-    setLoginModal(false);
-  };
   return (
     <Paper elevation={10}>
-      <LoginForm
-        handleClick={handleLoginClick}
-        handleClose={handleClose}
-        loginModal={loginModal}
-        setLoginModal={setLoginModal}
-      />
       <CartModal
         cartModal={cartModal}
         setCartModal={setCartModal}
@@ -69,6 +56,11 @@ export default function BottomNav() {
         }}
         showLabels
         className={classes.root}
+        style={
+          location.pathname === "/login" || location.pathname === "/signup"
+            ? { display: "none" }
+            : { display: "block" }
+        }
       >
         <BottomNavigationAction
           to="/"
@@ -88,8 +80,13 @@ export default function BottomNav() {
 
         <BottomNavigationAction
           label="Login"
-          onClick={handleLoginClick}
+          component={Link}
+          to="/login"
           icon={<PersonAddOutlined />}
+        />
+        <BottomNavigationAction
+          label="Welcome"
+          icon={<EmojiEmotionsOutlined />}
         />
       </BottomNavigation>
     </Paper>

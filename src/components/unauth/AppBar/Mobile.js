@@ -14,6 +14,7 @@ import { SearchOutlined, ShoppingBasketOutlined } from "@material-ui/icons";
 import LoginForm from "../../../modals/Login";
 import CartModal from "../../../modals/Cart";
 import AutocompleteModal from "../../../modals/Autocomplete/index";
+import { useLocation } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function Mobile() {
   const classes = useStyles();
+  const location = useLocation();
   const [cartModal, setCartModal] = React.useState(false);
   const [state, setState] = React.useState(false);
   const [Active, setActive] = React.useState(false);
@@ -71,7 +73,7 @@ export default function Mobile() {
             variant="outlined"
             label="search for products"
             color="primary"
-            style={{ width: "100%" }}
+            style={{ width: "60%", display: "none" }}
             onChange={handleSearch}
             onFocus={handleActive}
             onBlur={() => setActive(false)}

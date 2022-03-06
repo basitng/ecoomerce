@@ -68,7 +68,10 @@ export default function PaymentStepper({ state }) {
 
   const publicKey = "pk_test_e82c88b45e3f9a3c0733f950c24dd4cf011e1545";
   const productIDS = [];
-  items.map((data) => productIDS.push(data.id));
+  items.map((data) => {
+    console.log(data)
+    productIDS.push(data.id);
+  });
 
   const [city, setCity] = React.useState("");
   const [phone, setPhone] = React.useState(`0${user.phone_number}`);

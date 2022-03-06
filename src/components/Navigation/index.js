@@ -8,7 +8,7 @@ import DesktopAuthenticated from "../auth/AppBar/Desktop";
 import AuthenticatedBottomNav from "../auth/AppBar/BottomNav";
 import { useCart } from "react-use-cart";
 
-export default function Navigation({ show_off_in }) {
+export default function Navigation({ show_off_in_all }) {
   const { totalItems } = useCart();
   const location = useLocation();
   const { isAuthenticated } = useContext(AuthContext);
@@ -17,19 +17,11 @@ export default function Navigation({ show_off_in }) {
     <div>
       {isAuthenticated.isLoggedIn ? (
         <>
-          {show_off_in && location.pathname == `/${show_off_in}` ? (
-            <DesktopAuthenticated totalItems={totalItems} display="none" />
-          ) : (
-            <DesktopAuthenticated totalItems={totalItems} display={"block"} />
-          )}
+          <DesktopAuthenticated totalItems={totalItems} />
         </>
       ) : (
         <>
-          {show_off_in && location.pathname == `/${show_off_in}` ? (
-            <Desktop totalItems={totalItems} display="none" />
-          ) : (
-            <Desktop totalItems={totalItems} display={"block"} />
-          )}
+          <Desktop totalItems={totalItems} />
         </>
       )}
 

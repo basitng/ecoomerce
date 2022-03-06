@@ -38,52 +38,52 @@ export default function AnyProduct({
         <Paper elevation={1}>
           <div className="flash-card">
             <div className="status">{category}</div>
-            <Link className="detailLinks" to={`detail/${params.id}`}>
-              <div className="flash-card-img">
+            <div className="flash-card-img">
+              <Link className="detailLinks" to={`detail/${id}`}>
                 <img src={img} alt="" className="img" />
+              </Link>
+            </div>
+            <div className="flash-card-body">
+              <Typography variant="h6" className="product-name">
+                Iphone 12
+              </Typography>
+              <div className="flash-card-rating">
+                <Star className="rating-icon" />
+                <Star className="rating-icon" />
+                <Star className="rating-icon" />
+                <Star className="rating-icon" />
+                <StarHalfOutlined className="rating-icon" />
               </div>
-              <div className="flash-card-body">
-                <Typography variant="h6" className="product-name">
-                  Iphone 12
-                </Typography>
-                <div className="flash-card-rating">
-                  <Star className="rating-icon" />
-                  <Star className="rating-icon" />
-                  <Star className="rating-icon" />
-                  <Star className="rating-icon" />
-                  <StarHalfOutlined className="rating-icon" />
-                </div>
-                <div className="flash-card-footer">
-                  <div className="flex-items">
+              <div className="flash-card-footer">
+                <div className="flex-items">
+                  <Typography
+                    variant="h6"
+                    className="discount-price"
+                    color="primary"
+                  >
+                    {discount
+                      ? numberWithCommas(price - discountAmt)
+                      : numberWithCommas(price)}
+                  </Typography>
+                  {discount ? (
                     <Typography
-                      variant="h6"
-                      className="discount-price"
+                      variant="p"
+                      className="actual-price"
                       color="primary"
                     >
-                      {discount
-                        ? numberWithCommas(price - discountAmt)
-                        : numberWithCommas(price)}
+                      {numberWithCommas(price)}
                     </Typography>
-                    {discount ? (
-                      <Typography
-                        variant="p"
-                        className="actual-price"
-                        color="primary"
-                      >
-                        {numberWithCommas(price)}
-                      </Typography>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                  <IconButton>
-                    <div className="add-icon-container2">
-                      <Add className="add-icon" />
-                    </div>
-                  </IconButton>
+                  ) : (
+                    ""
+                  )}
                 </div>
+                <IconButton onClick={handleAddToCart}>
+                  <div className="add-icon-container2">
+                    <Add className="add-icon" />
+                  </div>
+                </IconButton>
               </div>
-            </Link>
+            </div>
           </div>
         </Paper>
       </Grid>

@@ -14,26 +14,21 @@ import {
   ShoppingCartOutlined,
 } from "@material-ui/icons";
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { SearchContext } from "../../../context/providers/SearchContext";
 import AutocompleteModal from "../../../modals/Autocomplete/index";
-import CartModal from "../../../modals/Cart";
-import CategoryDropdown from "../../../modals/category";
-import LoginForm from "../../../modals/Login";
 import { getApi } from "../../../requestMethods";
 import "../styles/Desktop.css";
 import Logo from "../../../assets/Logo.png";
 
 export default function Desktop({ display, totalItems }) {
-  const [loginModal, setLoginModal] = React.useState(false);
   const { dispatchSearch } = useContext(SearchContext);
-  const [state, setState] = React.useState(false);
   const [Active, setActive] = React.useState(false);
   const [search, setSearch] = React.useState("");
   const [cartModal, setCartModal] = React.useState(false);
   const [data, setData] = React.useState();
   const [Loading, setLoading] = React.useState(false);
-
+  const location = useLocation();
   const handleSearch = (e) => {
     setActive(true);
     setLoading(true);
@@ -55,9 +50,6 @@ export default function Desktop({ display, totalItems }) {
   const handleActive = () => {
     setActive(true);
   };
-  const handleLoginClick = () => {
-    setLoginModal(true);
-  };
   const handleCartModal = () => {
     setCartModal(true);
     if (cartModal) {
@@ -65,25 +57,16 @@ export default function Desktop({ display, totalItems }) {
     }
   };
 
-  const handleClose = () => {
-    setLoginModal(false);
-  };
-
   return (
     <React.Fragment>
-      <LoginForm
-        handleClick1={handleLoginClick}
-        handleClose={handleClose}
-        loginModal={loginModal}
-        setLoginModal={setLoginModal}
-      />
-
       <div className="appBar">
         <AppBar
           elevation={0}
           color="inherit"
           style={
-            display === "none" ? { display: "none" } : { display: "block" }
+            location.pathname === "/login" || location.pathname === "/signup"
+              ? { display: "none" }
+              : { display: "block" }
           }
         >
           <Toolbar>
@@ -132,7 +115,8 @@ export default function Desktop({ display, totalItems }) {
                 <Button
                   variant="outlined"
                   size="large"
-                  onClick={handleLoginClick}
+                  component={Link}
+                  to="/login"
                 >
                   <Typography color="primary">Login</Typography>
                 </Button>
