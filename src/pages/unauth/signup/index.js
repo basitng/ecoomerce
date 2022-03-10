@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { Container, Grid, makeStyles, Typography } from "@material-ui/core";
@@ -7,9 +7,12 @@ import { blue, red } from "@material-ui/core/colors";
 import { authAPI } from "../../../requestMethods";
 import { AuthContext } from "../../../context/providers/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
+import { GoogleLogin } from "react-google-login";
+import LinearIndeterminate from "../../../loader/Progress";
 
 export default function SignupPage() {
   const navigate = useNavigate();
+  const [GoogleCredentials, setGoogleCredentials] = useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
@@ -17,6 +20,7 @@ export default function SignupPage() {
   const { isAuthenticated, dispatch } = React.useContext(AuthContext);
   const [isError, setIsError] = React.useState(false);
   const [isValid, setIsValid] = React.useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const handleEmail = (e) => {
     setEmail(e.target.value);
   };
@@ -82,8 +86,31 @@ export default function SignupPage() {
         setIsError(isAuthenticated.error);
       });
   };
+
+  const handleLogin = (e) => {
+    setSubmitted(true);
+    setGoogleCredentials(e);
+    authAPI
+      .post("/google/register", {
+        username: GoogleCredentials.name,
+        email: GoogleCredentials.email,
+        password: GoogleCredentials.name + GoogleCredentials.googleId,
+      })
+      .then((res) => {
+        console.log(res);
+        dispatch({ type: "logUser", payload: res.data });
+        navigate(0);
+        setIsValid(isAuthenticated.error);
+      })
+      .catch((error) => {
+        dispatch({ type: "logUserFailed", payload: error });
+        setIsError(isAuthenticated.error);
+      });
+  };
+
   return (
     <div style={{ width: "100%" }}>
+      {submitted && <LinearIndeterminate />}
       <Container className={styles.container}>
         <div className={styles.center}>
           <Typography color="secondary" className={styles.header}>
@@ -156,32 +183,15 @@ export default function SignupPage() {
         <br />
         <div className="or-cred">
           <Typography className={styles.or}>Or</Typography>
-          <Button
-            startIcon={<Facebook />}
-            style={{ marginBottom: 10, background: blue[800] }}
-            fullWidth
-            color="primary"
-            variant="contained"
-            size="large"
-          >
-            <Typography style={{ fontSize: 13 }}>
-              {" "}
-              Continue with facebook
-            </Typography>
-          </Button>
-          <Button
-            startIcon={<Email />}
-            style={{ marginBottom: 10, background: red[900] }}
-            fullWidth
-            color="primary"
-            variant="contained"
-            size="large"
-          >
-            <Typography style={{ fontSize: 13 }}>
-              {" "}
-              Continue with Google
-            </Typography>
-          </Button>
+
+          <GoogleLogin
+            buttonText="Continue with Google"
+            onSuccess={(e) => handleLogin(e.profileObj)}
+            onFailure={""}
+            cookiePolicy={"single_host_origin"}
+            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+          />
+          <br />
           <br />
           <Typography style={{ fontSize: 14 }} color="secondary">
             Have an account?{" "}

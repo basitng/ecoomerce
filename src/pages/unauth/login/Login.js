@@ -3,6 +3,7 @@ import {
   Button,
   CircularProgress,
   Grid,
+  LinearProgress,
   makeStyles,
   TextField,
   Typography,
@@ -12,7 +13,8 @@ import { AuthContext } from "../../../context/providers/AuthContext";
 import { authAPI } from "../../../requestMethods";
 import { Email, Facebook } from "@material-ui/icons";
 import { red, blue } from "@material-ui/core/colors";
-
+import { GoogleLogin } from "react-google-login";
+import LinearIndeterminate from "../../../loader/Progress";
 const useStyles = makeStyles((theme) => ({
   container: {
     width: "100%",
@@ -45,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function Login() {
   const { isAuthenticated, dispatch } = useContext(AuthContext);
+  const [GoogleCredentials, setGoogleCredentials] = useState("");
   const [isError, setIsError] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -73,10 +76,27 @@ export default function Login() {
         setIsError(isAuthenticated.error);
       });
   };
+  const handleLogin = (e) => {
+    setSubmitted(true);
+    setGoogleCredentials(e);
+    authAPI
+      .post("/google/login", {
+        email: GoogleCredentials.email,
+      })
+      .then((res) => {
+        dispatch({ type: "logUser", payload: res.data });
+        navigate(0);
+        setIsValid(isAuthenticated.error);
+      })
+      .catch((error) => {
+        dispatch({ type: "logUserFailed", payload: error });
+        setIsError(isAuthenticated.error);
+      });
+  };
 
-  useEffect(() => {}, [0]);
   return (
     <div className={styles.container}>
+      {submitted && <LinearIndeterminate />}
       <Grid container className={styles.form}>
         <Grid item xs={12} md={12}>
           <TextField
@@ -122,33 +142,15 @@ export default function Login() {
           <br />
           <br />
           <div className="or-cred">
-            <Typography>On</Typography>
-            <Button
-              startIcon={<Facebook />}
-              style={{ marginBottom: 10, background: blue[800] }}
-              fullWidth
-              color="primary"
-              variant="contained"
-              size="large"
-            >
-              <Typography style={{ fontSize: 13 }}>
-                {" "}
-                Continue with facebook
-              </Typography>
-            </Button>
-            <Button
-              startIcon={<Email />}
-              style={{ marginBottom: 10, background: red[900] }}
-              fullWidth
-              color="primary"
-              variant="contained"
-              size="large"
-            >
-              <Typography style={{ fontSize: 13 }}>
-                {" "}
-                Continue with Google
-              </Typography>
-            </Button>
+            <Typography>Or</Typography>
+
+            <GoogleLogin
+              buttonText="Continue with Google"
+              onSuccess={(e) => handleLogin(e.profileObj)}
+              onFailure={""}
+              cookiePolicy={"single_host_origin"}
+              clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+            />
             <br />
             <br />
             <Typography style={{ fontSize: 14 }} color="secondary">

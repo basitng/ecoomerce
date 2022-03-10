@@ -66,10 +66,10 @@ export default function PaymentStepper({ state }) {
   const { payload } = isAuthenticated;
   const [user, setUser] = React.useState(payload.user);
 
-  const publicKey = "pk_test_e82c88b45e3f9a3c0733f950c24dd4cf011e1545";
+  const publicKey = process.env.REACT_APP_PRIVATE_PAYSTACK_KEY;
   const productIDS = [];
   items.map((data) => {
-    console.log(data)
+    console.log(data);
     productIDS.push(data.id);
   });
 
