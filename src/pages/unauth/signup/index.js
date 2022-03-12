@@ -9,9 +9,12 @@ import { AuthContext } from "../../../context/providers/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
 import LinearIndeterminate from "../../../loader/Progress";
+import { useErrandContext } from "../../../context/providers/ErrandContext";
+import { Alert } from "@material-ui/lab";
 
 export default function SignupPage() {
   const navigate = useNavigate();
+  const { errand, dispatchErrand } = React.useContext(useErrandContext);
   const [GoogleCredentials, setGoogleCredentials] = useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -69,6 +72,7 @@ export default function SignupPage() {
   }));
   const styles = useStyles();
   const handleSubmit = async (e) => {
+    setSubmitted(true);
     e.preventDefault();
     await authAPI
       .post("/register", {
@@ -83,30 +87,54 @@ export default function SignupPage() {
       })
       .catch((error) => {
         dispatch({ type: "logUserFailed", payload: error });
-        setIsError(isAuthenticated.error);
+        dispatchErrand({ type: "error", payload: 6000 });
+        setIsError(isAuthenticated.errr);
+        setSubmitted(false);
       });
   };
-
   const handleLogin = (e) => {
     setSubmitted(true);
     setGoogleCredentials(e);
+    console.log(e);
     authAPI
       .post("/google/register", {
-        username: GoogleCredentials.name,
-        email: GoogleCredentials.email,
-        password: GoogleCredentials.name + GoogleCredentials.googleId,
+        clientId: GoogleCredentials.email,
       })
       .then((res) => {
-        console.log(res);
         dispatch({ type: "logUser", payload: res.data });
         navigate(0);
         setIsValid(isAuthenticated.error);
       })
       .catch((error) => {
         dispatch({ type: "logUserFailed", payload: error });
-        setIsError(isAuthenticated.error);
+        dispatchErrand({ type: "error", payload: 6000 });
+        setIsError(isAuthenticated.errr);
+        setSubmitted(false);
       });
   };
+
+  const errorMessage = (msg) => (
+    <Alert
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        width: "100%",
+        zIndex: 300000,
+        marginBottom: 25,
+      }}
+      severity="error"
+    >
+      {msg}!
+    </Alert>
+  );
+
+  // run code everytime errand  changes
+  useEffect(() => {
+    setTimeout(() => {
+      dispatchErrand({ type: "reset" });
+    }, errand.expireDate);
+    console.log(errand.error);
+  }, [errand.error]);
 
   return (
     <div style={{ width: "100%" }}>
@@ -121,6 +149,7 @@ export default function SignupPage() {
           </Typography>
         </div>
         <Grid container spacing={2} justifyContent="center">
+          {errand.error && errorMessage("Email or Password not correct")}
           <Grid item xs={12} md={12}>
             <TextField
               onChange={handleUsername}
@@ -174,7 +203,7 @@ export default function SignupPage() {
           onClick={handleSubmit}
           fullWidth
           color="primary"
-          variant="contained"
+          variant={submitted ? "disabled" : "contained"}
           size="large"
         >
           Signup
@@ -191,6 +220,7 @@ export default function SignupPage() {
             cookiePolicy={"single_host_origin"}
             clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
           />
+
           <br />
           <br />
           <Typography style={{ fontSize: 14 }} color="secondary">

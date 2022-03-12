@@ -6,16 +6,19 @@ import { BrowserRouter } from "react-router-dom";
 import AuthContextProvider from "./context/providers/AuthContext";
 import { CartProvider } from "react-use-cart";
 import SearchContextProvider from "./context/providers/SearchContext";
+import UseErrandContextProvider from "./context/providers/ErrandContext";
 
 ReactDOM.render(
   <BrowserRouter>
     <React.StrictMode>
       <AuthContextProvider>
-        <SearchContextProvider>
-          <CartProvider>
-            <App />
-          </CartProvider>
-        </SearchContextProvider>
+        <UseErrandContextProvider>
+          <SearchContextProvider>
+            <CartProvider>
+              <App />
+            </CartProvider>
+          </SearchContextProvider>
+        </UseErrandContextProvider>
       </AuthContextProvider>
     </React.StrictMode>
   </BrowserRouter>,

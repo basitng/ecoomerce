@@ -15,6 +15,8 @@ import { Email, Facebook } from "@material-ui/icons";
 import { red, blue } from "@material-ui/core/colors";
 import { GoogleLogin } from "react-google-login";
 import LinearIndeterminate from "../../../loader/Progress";
+import { useErrandContext } from "../../../context/providers/ErrandContext";
+import { Alert } from "@material-ui/lab";
 const useStyles = makeStyles((theme) => ({
   container: {
     width: "100%",
@@ -47,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function Login() {
   const { isAuthenticated, dispatch } = useContext(AuthContext);
+  const { errand, dispatchErrand } = useContext(useErrandContext);
   const [GoogleCredentials, setGoogleCredentials] = useState("");
   const [isError, setIsError] = useState(false);
   const [isValid, setIsValid] = useState(false);
@@ -60,7 +63,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+
     await authAPI
       .post("/login", {
         email: email,
@@ -68,12 +71,15 @@ export default function Login() {
       })
       .then((res) => {
         dispatch({ type: "logUser", payload: res.data });
+        dispatchErrand({ type: "success", payload: 3000 });
         navigate(0);
         setIsValid(isAuthenticated.error);
       })
       .catch((error) => {
         dispatch({ type: "logUserFailed", payload: error });
+        dispatchErrand({ type: "error", payload: 6000 });
         setIsError(isAuthenticated.error);
+        setSubmitted(false);
       });
   };
   const handleLogin = (e) => {
@@ -90,14 +96,40 @@ export default function Login() {
       })
       .catch((error) => {
         dispatch({ type: "logUserFailed", payload: error });
-        setIsError(isAuthenticated.error);
+        dispatchErrand({ type: "error", payload: 6000 });
+        setIsError(isAuthenticated.errr);
+        setSubmitted(false);
       });
   };
 
+  const errorMessage = (msg) => (
+    <Alert
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        width: "100%",
+        zIndex: 300000,
+        marginBottom: 25,
+      }}
+      severity="error"
+    >
+      {msg}!
+    </Alert>
+  );
+
+  // run code everytime errand  changes
+  useEffect(() => {
+    setTimeout(() => {
+      dispatchErrand({ type: "reset" });
+    }, errand.expireDate);
+    console.log(errand.error);
+  }, [errand.error]);
   return (
     <div className={styles.container}>
       {submitted && <LinearIndeterminate />}
+
       <Grid container className={styles.form}>
+        {errand.error && errorMessage("Email or Password not correct")}
         <Grid item xs={12} md={12}>
           <TextField
             value={email}
