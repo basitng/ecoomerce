@@ -213,11 +213,11 @@ export default function SignupPage() {
           <Typography className={styles.or}>Or</Typography>
 
           <GoogleLogin
+            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
             buttonText="Continue with Google"
             onSuccess={(e) => handleLogin(e.profileObj)}
             onFailure={""}
             cookiePolicy={"single_host_origin"}
-            clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
           />
 
           <br />
