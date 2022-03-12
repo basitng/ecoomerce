@@ -95,10 +95,9 @@ export default function SignupPage() {
   const handleLogin = (e) => {
     setSubmitted(true);
     setGoogleCredentials(e);
-    console.log(e);
     authAPI
       .post("/google/register", {
-        clientId: GoogleCredentials.email,
+        goodleId: GoogleCredentials.googleId,
       })
       .then((res) => {
         dispatch({ type: "logUser", payload: res.data });
