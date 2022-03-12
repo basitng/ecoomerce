@@ -92,12 +92,12 @@ export default function SignupPage() {
         setSubmitted(false);
       });
   };
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     setSubmitted(true);
     setGoogleCredentials(e);
-    authAPI
+    await authAPI
       .post("/google/register", {
-        goodleId: GoogleCredentials.googleId,
+        goodleId: e.tokenId,
       })
       .then((res) => {
         dispatch({ type: "logUser", payload: res.data });
@@ -215,7 +215,7 @@ export default function SignupPage() {
           <GoogleLogin
             clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
             buttonText="Continue with Google"
-            onSuccess={(e) => handleLogin(e.profileObj)}
+            onSuccess={(e) => handleLogin(e)}
             onFailure={""}
             cookiePolicy={"single_host_origin"}
           />

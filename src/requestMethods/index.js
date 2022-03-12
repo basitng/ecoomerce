@@ -11,8 +11,6 @@ if (localStorage.getItem("user")) {
 export const getApi = axios.create({
   baseURL: BASE_URL,
 });
-
-console.log(TOKEN);
 export const getApiWithToken = axios.create({
   baseURL: BASE_URL,
   headers: { token: `Bearer ${TOKEN}` },
