@@ -7,7 +7,7 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import { CartProvider, useCart } from "react-use-cart";
 
@@ -73,14 +73,16 @@ export default function CartModal({ handleClick3, cartModal, setCartModal }) {
     removeItem,
   } = useCart();
   const styles = useStyles();
-
+  const location = useLocation();
   const toggleDrawerClose = () => {
     setCartModal(false);
   };
+  useEffect(() => {
+    setCartModal(false);
+  }, [location.pathname]);
 
   const addComa = (amt) =>
     "₦" + amt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
   return (
     <React.Fragment>
       <Drawer

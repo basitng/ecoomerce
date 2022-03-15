@@ -82,12 +82,11 @@ export default function Login() {
         setSubmitted(false);
       });
   };
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     setSubmitted(true);
-    setGoogleCredentials(e);
     authAPI
       .post("/google/login", {
-        email: GoogleCredentials.email,
+        email: e.email,
       })
       .then((res) => {
         dispatch({ type: "logUser", payload: res.data });

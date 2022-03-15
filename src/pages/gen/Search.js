@@ -43,7 +43,6 @@ export default function SearchPage() {
   const [isLoading, setIsLoading] = useState(controller.isEmpty);
   const classes = useStyles();
 
-  console.log(controller.data);
   return (
     <div className="container">
       {isLoading === true ? <LinearIndeterminate /> : ""}

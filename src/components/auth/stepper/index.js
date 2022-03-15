@@ -11,6 +11,8 @@ import {
   Select,
   TextField,
   Typography,
+  Backdrop,
+  CircularProgress,
 } from "@material-ui/core";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +27,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     marginBottom: theme.spacing(1),
     minWidth: 120,
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: "#fff",
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -65,22 +71,26 @@ export default function PaymentStepper({ state }) {
   const { isAuthenticated } = React.useContext(AuthContext);
   const { payload } = isAuthenticated;
   const [user, setUser] = React.useState(payload.user);
-
+  const [Loading, setLoading] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
   const publicKey = process.env.REACT_APP_PRIVATE_PAYSTACK_KEY;
   const productIDS = [];
   items.map((data) => {
-    console.log(data);
     productIDS.push(data.id);
   });
 
   const [city, setCity] = React.useState("");
   const [phone, setPhone] = React.useState(`0${user.phone_number}`);
   const [junction, setJunction] = React.useState("");
+  const [junctionNo, setJunctionNo] = React.useState("");
   const [streetName, setStreetName] = React.useState(user.address);
 
   const componentProps = {
     email: user.email,
-    amount: (cartTotal + junction) * 100,
+    amount: (cartTotal + junctionNo) * 100,
     metadata: {
       name: user.username,
       phone: phone,
@@ -92,21 +102,25 @@ export default function PaymentStepper({ state }) {
     publicKey,
     text: "Place Order",
     onSuccess: () => {
+      setLoading(true);
       getApiWithToken
         .post("/order/create", {
           userID: user._id,
           productId: productIDS,
-          amt: cartTotal + junction,
+          amt: cartTotal + junctionNo,
           address: "Lagos State",
           junction: junction,
           phone: phone,
-          shipping: junction,
+          shipping: junctionNo,
         })
         .then((res) => {
           console.log("Data", res.data);
           navigate("/");
         })
-        .catch((e) => console.log(e));
+        .catch((e) => {
+          console.log(e);
+          setLoading(false);
+        });
     },
   };
   const handlePhone = (event) => {
@@ -117,6 +131,7 @@ export default function PaymentStepper({ state }) {
   };
   const handleJunction = (e) => {
     setJunction(e.target.value);
+    console.log(e.target.value);
   };
   const handleStreetName = (e) => {
     setStreetName(e.target.value);
@@ -125,6 +140,15 @@ export default function PaymentStepper({ state }) {
   return (
     <div>
       <Container style={{ marginTop: "8rem" }}>
+        {Loading && (
+          <Backdrop
+            className={classes.backdrop}
+            open={true}
+            onClick={handleClose}
+          >
+            <CircularProgress color="inherit" />
+          </Backdrop>
+        )}
         <Grid container spacing={2} justifyContent="space-between">
           <Grid item xs={12} md={8}>
             <Grid container spacing={3}>
@@ -201,7 +225,8 @@ export default function PaymentStepper({ state }) {
                               <MenuItem
                                 key={docs.id}
                                 name={docs.location}
-                                value={docs.amount}
+                                value={docs.location}
+                                onClick={() => setJunctionNo(docs.amount)}
                               >
                                 {docs.location}
                               </MenuItem>
@@ -243,7 +268,7 @@ export default function PaymentStepper({ state }) {
 
           <Grid item xs={12} md={4}>
             <div style={{ width: "100%", background: "#fff" }}>
-              <_ProductLists location={junction} />
+              <_ProductLists location={junctionNo} />
             </div>
           </Grid>
         </Grid>

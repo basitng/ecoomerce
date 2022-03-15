@@ -95,9 +95,10 @@ export default function SignupPage() {
   const handleLogin = async (e) => {
     setSubmitted(true);
     setGoogleCredentials(e);
+    console.log(e.tokenId);
     await authAPI
       .post("/google/register", {
-        goodleId: e.tokenId,
+        tokenId: e.tokenId,
       })
       .then((res) => {
         dispatch({ type: "logUser", payload: res.data });
@@ -148,7 +149,7 @@ export default function SignupPage() {
           </Typography>
         </div>
         <Grid container spacing={2} justifyContent="center">
-          {errand.error && errorMessage("Email or Password not correct")}
+          {errand.error && errorMessage("OOps email already existed")}
           <Grid item xs={12} md={12}>
             <TextField
               onChange={handleUsername}
@@ -157,6 +158,7 @@ export default function SignupPage() {
               type="text"
               fullWidth
               variant="outlined"
+              required
             />
           </Grid>
           <Grid item xs={12} md={12}>
