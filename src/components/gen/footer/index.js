@@ -93,11 +93,11 @@ export default function Footer() {
             </Typography>
             <br />
             <Typography variant="p" style={{ color: "#909eb8" }}>
-              Email: Nwakwo@gmail.com
+              Email: Nwakwo118@gmail.com
             </Typography>
             <br />
             <Typography variant="p" style={{ color: "#909eb8" }}>
-              Phone: 0813447125
+              Phone: 08134471235
             </Typography>
             <div className="footer-flex">
               <div className="social-wrapper">
