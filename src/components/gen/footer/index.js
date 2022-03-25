@@ -101,15 +101,19 @@ export default function Footer() {
             </Typography>
             <div className="footer-flex">
               <div className="social-wrapper">
-                <a href="">
+                <a href="https://web.facebook.com/NGeorgetech-planet-486821071848259">
                   <Facebook className="social-icon" />
                 </a>
               </div>
               <div className="social-wrapper">
-                <Twitter className="social-icon" />
+                <a href="">
+                  <Twitter className="social-icon" />
+                </a>
               </div>
               <div className="social-wrapper">
-                <Instagram className="social-icon" />
+                <a href="https://www.instagram.com/n.georgetech_planet/">
+                  <Instagram className="social-icon" />
+                </a>
               </div>
             </div>
           </Grid>

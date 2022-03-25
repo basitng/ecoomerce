@@ -129,16 +129,16 @@ export default function CartModal({ handleClick3, cartModal, setCartModal }) {
                   </Link>
                 </Grid>
                 <Grid item xs={10} md={10}>
-                  <Link to="/payment" className="link">
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      color="secondary"
-                      startIcon={<CallOutlined />}
-                    >
-                      Call to order
-                    </Button>
-                  </Link>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="secondary"
+                    startIcon={<CallOutlined />}
+                  >
+                    <a href="tel:08134471235" className="link">
+                      Call to order (08134471235)
+                    </a>
+                  </Button>
                 </Grid>
               </Grid>
             </Grid>
