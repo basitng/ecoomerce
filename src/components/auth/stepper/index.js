@@ -252,7 +252,7 @@ export default function PaymentStepper({ state }) {
                   <Grid item xs={12} md={4}>
                     <PaystackButton
                       className={
-                        junction === "" || phone === "" || streetName === ""
+                        !junction || !phone || !streetName
                           ? classes.disable
                           : classes.btn
                       }

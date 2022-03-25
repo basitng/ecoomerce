@@ -101,7 +101,9 @@ export default function Footer() {
             </Typography>
             <div className="footer-flex">
               <div className="social-wrapper">
-                <Facebook component={Link} to="" className="social-icon" />
+                <a href="">
+                  <Facebook className="social-icon" />
+                </a>
               </div>
               <div className="social-wrapper">
                 <Twitter className="social-icon" />

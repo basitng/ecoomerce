@@ -66,7 +66,16 @@ const useStyles = makeStyles((theme) => ({
 export default function _Categories() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-  const [data, setData] = React.useState([]);
+  const [AllProduct, setAllProduct] = React.useState("");
+  const [PhonePouch, setPhonePouch] = React.useState("");
+  const [ScreenGuide, setScreenGuide] = React.useState("");
+  const [Laptops, setLaptops] = React.useState("");
+  const [Accessories, setAccessories] = React.useState("");
+  const [Chargers, setChargers] = React.useState("");
+  const [AirPods, setAirPods] = React.useState("");
+  const [AppleWatch, setAppleWatch] = React.useState("");
+  const [PowerBank, setPowerBank] = React.useState("");
+  const [MobilePhone, setMobilePhone] = React.useState("");
   const [isLoading, setIsLoading] = React.useState(true);
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -74,10 +83,21 @@ export default function _Categories() {
   React.useEffect(async () => {
     try {
       getApi
-        .get("/product")
+        .get("/category")
         .then(({ data }) => {
-          setData(data);
+          setAllProduct(data.allProduct);
+          setAirPods(data.air_pods);
+          setPhonePouch(data.screen_cover);
+          setScreenGuide(data.screen_guard);
+          setLaptops(data.laptops);
+          setAppleWatch(data.apple_watch);
+          setPowerBank(data.power_bank);
+          setChargers(data.chargers);
+          setChargers(data.Accessories);
+          setMobilePhone(data.MobilePhone);
           setIsLoading(false);
+
+          console.log("AIrPod", AirPods);
         })
         .catch((error) => {
           setIsLoading(true);
@@ -105,16 +125,15 @@ export default function _Categories() {
           className={classes.Tab}
         >
           <Tab label="All Products" {...a11yProps(0)} />
-          <Tab label="Latest Products" {...a11yProps(1)} />
-          <Tab label="New Products" {...a11yProps(2)} />
-          <Tab label="Fairly used Products" {...a11yProps(3)} />
+          <Tab label="Screen Guide" {...a11yProps(1)} />
+          <Tab label="Laptops" {...a11yProps(2)} />
+          <Tab label="Apple Watch" {...a11yProps(3)} />
           <Tab label="Mobile Phones" {...a11yProps(4)} />
-          <Tab label="Accessories" {...a11yProps(5)} />
-          <Tab label="Smart Devices" {...a11yProps(6)} />
-          <Tab label="Laptops" {...a11yProps(7)} />
-          <Tab label="Chargers" {...a11yProps(8)} />
-          <Tab label="Headphones" {...a11yProps(9)} />
-          <Tab label="Ear Pods" {...a11yProps(10)} />
+          <Tab label="Air Pods" {...a11yProps(5)} />
+          <Tab label="Power Banks" {...a11yProps(6)} />
+          <Tab label="Chargers" {...a11yProps(7)} />
+          <Tab label="Accessories" {...a11yProps(8)} />
+          <Tab label="Phone Pouch" {...a11yProps(9)} />
         </Tabs>
       </AppBar>
       <TabPanel className={classes.TabPanel} value={value} index={0}>
@@ -125,47 +144,21 @@ export default function _Categories() {
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Grid container spacing={2}>
-          {!isLoading ? (
-            <React.Fragment>
-              <>
-                {data &&
-                  data.map(
-                    (data) =>
-                      data.category === "Mobile phone" && (
-                        <Grid item xs={12} md={3}>
-                          <ArrivalProduct
-                            title={data.name}
-                            img={data.frontPic}
-                            category={""}
-                            price={data.price}
-                            id={data._id}
-                            desc={data.desc}
-                          />
-                        </Grid>
-                      )
-                  )}
-              </>
-              <>
-                {data &&
-                  data.map(
-                    (data) =>
-                      data.category === "New" && (
-                        <Grid item xs={12} md={3}>
-                          <ArrivalProduct
-                            title={data.name}
-                            img={data.frontPic}
-                            category={""}
-                            price={data.price}
-                            id={data._id}
-                            desc={data.desc}
-                          />
-                        </Grid>
-                      )
-                  )}{" "}
-              </>
-            </React.Fragment>
-          ) : (
-            <React.Fragment>
+          <>
+            {ScreenGuide !== "" ? (
+              ScreenGuide.map((data) => (
+                <Grid item xs={12} md={3}>
+                  <ArrivalProduct
+                    title={data.name}
+                    img={data.frontPic}
+                    category={""}
+                    price={data.price}
+                    id={data._id}
+                    desc={data.desc}
+                  />
+                </Grid>
+              ))
+            ) : (
               <Grid container spacing={2}>
                 {Array(6)
                   .fill(Math.random() * 100)
@@ -175,33 +168,233 @@ export default function _Categories() {
                     </Grid>
                   ))}
               </Grid>
-            </React.Fragment>
-          )}
+            )}
+          </>
         </Grid>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        <>
+          {Laptops !== "" ? (
+            Laptops.map((data) => (
+              <Grid item xs={12} md={3}>
+                <ArrivalProduct
+                  title={data.name}
+                  img={data.frontPic}
+                  category={""}
+                  price={data.price}
+                  id={data._id}
+                  desc={data.desc}
+                />
+              </Grid>
+            ))
+          ) : (
+            <Grid container spacing={2}>
+              {Array(6)
+                .fill(Math.random() * 100)
+                .map(() => (
+                  <Grid item xs={12} md={3}>
+                    <_Skeleton />
+                  </Grid>
+                ))}
+            </Grid>
+          )}
+        </>
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Item Four
+        <>
+          {AppleWatch !== "" ? (
+            AppleWatch.map((data) => (
+              <Grid item xs={12} md={3}>
+                <ArrivalProduct
+                  title={data.name}
+                  img={data.frontPic}
+                  category={""}
+                  price={data.price}
+                  id={data._id}
+                  desc={data.desc}
+                />
+              </Grid>
+            ))
+          ) : (
+            <Grid container spacing={2}>
+              {Array(6)
+                .fill(Math.random() * 100)
+                .map(() => (
+                  <Grid item xs={12} md={3}>
+                    <_Skeleton />
+                  </Grid>
+                ))}
+            </Grid>
+          )}
+        </>
       </TabPanel>
       <TabPanel value={value} index={4}>
-        Item Five
+        <>
+          {MobilePhone !== "" ? (
+            MobilePhone.map((data) => (
+              <Grid item xs={12} md={3}>
+                <ArrivalProduct
+                  title={data.name}
+                  img={data.frontPic}
+                  category={""}
+                  price={data.price}
+                  id={data._id}
+                  desc={data.desc}
+                />
+              </Grid>
+            ))
+          ) : (
+            <Grid container spacing={2}>
+              {Array(6)
+                .fill(Math.random() * 100)
+                .map(() => (
+                  <Grid item xs={12} md={3}>
+                    <_Skeleton />
+                  </Grid>
+                ))}
+            </Grid>
+          )}
+        </>
       </TabPanel>
       <TabPanel value={value} index={5}>
-        Item Six
+        <>
+          {AirPods !== "" ? (
+            AirPods.map((data) => (
+              <Grid item xs={12} md={3}>
+                <ArrivalProduct
+                  title={data.name}
+                  img={data.frontPic}
+                  category={""}
+                  price={data.price}
+                  id={data._id}
+                  desc={data.desc}
+                />
+              </Grid>
+            ))
+          ) : (
+            <Grid container spacing={2}>
+              {Array(6)
+                .fill(Math.random() * 100)
+                .map(() => (
+                  <Grid item xs={12} md={3}>
+                    <_Skeleton />
+                  </Grid>
+                ))}
+            </Grid>
+          )}
+        </>
       </TabPanel>
       <TabPanel value={value} index={6}>
-        Item Seven
+        <>
+          {PowerBank !== "" ? (
+            PowerBank.map((data) => (
+              <Grid item xs={12} md={3}>
+                <ArrivalProduct
+                  title={data.name}
+                  img={data.frontPic}
+                  category={""}
+                  price={data.price}
+                  id={data._id}
+                  desc={data.desc}
+                />
+              </Grid>
+            ))
+          ) : (
+            <Grid container spacing={2}>
+              {Array(6)
+                .fill(Math.random() * 100)
+                .map(() => (
+                  <Grid item xs={12} md={3}>
+                    <_Skeleton />
+                  </Grid>
+                ))}
+            </Grid>
+          )}
+        </>
       </TabPanel>
       <TabPanel value={value} index={7}>
-        Item Seven
+        <>
+          {Chargers !== "" ? (
+            Chargers.map((data) => (
+              <Grid item xs={12} md={3}>
+                <ArrivalProduct
+                  title={data.name}
+                  img={data.frontPic}
+                  category={""}
+                  price={data.price}
+                  id={data._id}
+                  desc={data.desc}
+                />
+              </Grid>
+            ))
+          ) : (
+            <Grid container spacing={2}>
+              {Array(6)
+                .fill(Math.random() * 100)
+                .map(() => (
+                  <Grid item xs={12} md={3}>
+                    <_Skeleton />
+                  </Grid>
+                ))}
+            </Grid>
+          )}
+        </>
       </TabPanel>
       <TabPanel value={value} index={8}>
-        Item Seven
+        <>
+          {Accessories !== "" ? (
+            Accessories.map((data) => (
+              <Grid item xs={12} md={3}>
+                <ArrivalProduct
+                  title={data.name}
+                  img={data.frontPic}
+                  category={""}
+                  price={data.price}
+                  id={data._id}
+                  desc={data.desc}
+                />
+              </Grid>
+            ))
+          ) : (
+            <Grid container spacing={2}>
+              {Array(6)
+                .fill(Math.random() * 100)
+                .map(() => (
+                  <Grid item xs={12} md={3}>
+                    <_Skeleton />
+                  </Grid>
+                ))}
+            </Grid>
+          )}
+        </>
       </TabPanel>
       <TabPanel value={value} index={9}>
-        Item Seven
+        <>
+          {PhonePouch !== "" ? (
+            PhonePouch.map((data) => (
+              <Grid item xs={12} md={3}>
+                <ArrivalProduct
+                  title={data.name}
+                  img={data.frontPic}
+                  category={""}
+                  price={data.price}
+                  id={data._id}
+                  desc={data.desc}
+                />
+              </Grid>
+            ))
+          ) : (
+            <Grid container spacing={2}>
+              {Array(6)
+                .fill(Math.random() * 100)
+                .map(() => (
+                  <Grid item xs={12} md={3}>
+                    <_Skeleton />
+                  </Grid>
+                ))}
+            </Grid>
+          )}
+        </>
       </TabPanel>
     </div>
   );
