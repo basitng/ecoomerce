@@ -35,30 +35,34 @@ function App() {
   const { isAuthenticated } = React.useContext(AuthContext);
   const user = isAuthenticated.isLoggedIn;
   return (
-    <ThemeProvider theme={theme}>
-      <Routes>
-        {user ? (
-          <>
-            <Route path="/signup" element={<Navigate to="/" />} />
-            <Route path="/login" element={<Navigate to="/" />} />
-          </>
-        ) : (
-          <>
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/payment" element={<Navigate to="/" />} />
-            <Route path="/profile" element={<Navigate to="/" />} />
-          </>
-        )}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/search" element={<SearchPage />} />
-        <Route path="/payment" element={<PaymentPage />} />
-        <Route path="/detail/:id" element={<DetailPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-      </Routes>
-      <Navigation />
-      <Footer />
-    </ThemeProvider>
+    <React.Fragment>
+      <h1>OOPS --DNS NOT SERVED YET, PLEASE CONTACT YOUR WEB MASTER</h1>
+      {/* 
+      <ThemeProvider theme={theme}>
+        <Routes>
+          {user ? (
+            <>
+              <Route path="/signup" element={<Navigate to="/" />} />
+              <Route path="/login" element={<Navigate to="/" />} />
+            </>
+          ) : (
+            <>
+              <Route path="/signup" element={<SignupPage />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/payment" element={<Navigate to="/" />} />
+              <Route path="/profile" element={<Navigate to="/" />} />
+            </>
+          )}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/detail/:id" element={<DetailPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+        </Routes>
+        <Navigation />
+        <Footer />
+      </ThemeProvider> */}
+    </React.Fragment>
   );
 }
 
