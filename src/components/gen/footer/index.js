@@ -128,7 +128,8 @@ export default function Footer() {
         className="developer"
       >
         <Typography variant="p" className="dev-style">
-          &copy; Copyright by georgetech created by basitng
+          &copy; Copyright by georgetech enterprise; product created by{" "}
+          <a href="basitng.vercel.com">basitng</a>
         </Typography>
       </div>
     </React.Fragment>
