@@ -37,7 +37,7 @@ function App() {
   return (
     <React.Fragment>
       <h1>OOPS --DNS NOT SERVED YET, PLEASE CONTACT YOUR WEB MASTER</h1>
-      {/* 
+      
       <ThemeProvider theme={theme}>
         <Routes>
           {user ? (
@@ -61,7 +61,7 @@ function App() {
         </Routes>
         <Navigation />
         <Footer />
-      </ThemeProvider> */}
+      </ThemeProvider>
     </React.Fragment>
   );
 }
