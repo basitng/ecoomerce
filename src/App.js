@@ -36,8 +36,6 @@ function App() {
   const user = isAuthenticated.isLoggedIn;
   return (
     <React.Fragment>
-      <h1>OOPS --DNS NOT SERVED YET, PLEASE CONTACT YOUR WEB MASTER</h1>
-      
       <ThemeProvider theme={theme}>
         <Routes>
           {user ? (
